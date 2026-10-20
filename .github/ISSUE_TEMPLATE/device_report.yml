@@ -1,0 +1,61 @@
+name: Device report
+description: Tell us how EchoCatch behaves on your phone and earbuds (no audio, please).
+title: "[Device] <phone> + <earbuds>"
+labels: ["compatibility"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Reports build the public compatibility list. Please do not attach audio recordings.
+  - type: input
+    id: phone
+    attributes:
+      label: Phone model
+      placeholder: "OnePlus 11R"
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version and skin
+      placeholder: "Android 14, OxygenOS 14"
+    validations:
+      required: true
+  - type: input
+    id: earbuds
+    attributes:
+      label: Earbuds model (not Apple)
+      placeholder: "OnePlus Buds 4"
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Which microphone source worked?
+      options:
+        - Phone mic only
+        - Headset mic (classic Bluetooth)
+        - Headset mic (LE Audio)
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: music
+    attributes:
+      label: What happened to music while the headset mic was open?
+      options:
+        - Quality stayed good
+        - Quality dropped (phone-call sound)
+        - Music paused or stopped
+        - Not tested
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Exported device report (JSON, contains no audio)
+      render: json
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else

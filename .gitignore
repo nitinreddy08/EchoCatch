@@ -1,0 +1,37 @@
+# Gradle / Android
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.keystore
+*.jks
+
+# Native builds
+/native/**/build*/
+/tools/**/build*/
+/build-host/
+cmake-build-*/
+CMakeUserPresets.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Benchmark corpus and generated audio are never committed (see docs/plan/06-quality-and-testing.md)
+/tools/corpus/data/
+*.wav
+!/tools/bench/testdata/**/*.wav
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
