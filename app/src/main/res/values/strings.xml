@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<resources>
+    <string name="app_name">EchoCatch</string>
+    <string name="skeleton_message">EchoCatch is under construction. This is the empty app skeleton (milestone M0).</string>
+</resources>

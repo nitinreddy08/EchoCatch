@@ -52,7 +52,9 @@ Module dependency rule: `app` → `service` → (`core/*`); `core/policy` and `c
 | Async | Kotlin coroutines for control only; the audio path never goes through coroutines |
 | Settings | Jetpack DataStore |
 | DI | Manual constructor injection wired in `app/` (small graph, fewer dependencies) |
-| Build | Gradle (Kotlin DSL, version catalog); CMake for native |
+| Build | Gradle 9.6 wrapper (Kotlin DSL, version catalog); Android Gradle Plugin 9.4 with built-in Kotlin; Kotlin 2.4; CMake for native |
+| SDK levels | minSdk 26, compileSdk and targetSdk 36 (Play requires 36+ from 2026-08-31) |
+| Local vs CI | Pure Kotlin/JVM modules (`core:model`, `core:policy`) and the native core build and test anywhere. Android modules need the Android SDK and are included only when one is found (`settings.gradle.kts`, override with `-Pechocatch.android=true|false`) |
 | minSdk | 26 (Android 8.0), per ADR-0009 |
 | ABIs | `arm64-v8a` and `armeabi-v7a` (devices), `x86_64` (emulator), per ADR-0009 |
 | Native tests | GoogleTest |
