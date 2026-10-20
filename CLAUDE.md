@@ -4,9 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-The project is in the **planning phase**: the repository contains documentation only. There is no code, no build system, and no tests yet, so there are no build, lint, or test commands. Do not invent any. When M0-T2 and M0-T3 (Gradle and native skeletons) land, add the real commands here in the same PR, including how to run a single test (roadmap tasks M0-T2, M0-T3, M1-T7).
+Milestone M0 (foundations and spikes) is in progress. Build skeletons, CI and the experiment app exist; the product itself (detection pipeline, alert, real UI) does not yet. Status per task is in `docs/plan/05-roadmap.md`.
 
 EchoCatch is a free, open-source, fully offline Android app. While the user listens to music on Bluetooth earphones, it listens to the environment and, when someone calls the user's name, ducks or pauses the media and plays an alert.
+
+## Commands
+
+Native core, scripts and licence register (host build, runs anywhere):
+
+```
+cmake --preset host && cmake --build --preset host && ctest --preset host     # everything
+ctest --preset host -R PipelineSkeleton                                        # one test by name
+cmake --preset host-sanitize && cmake --build --preset host-sanitize && ctest --preset host-sanitize   # ASan + UBSan
+python3 -I -m unittest discover -s tools/ci/tests                              # CI script tests (also run by ctest)
+python3 -I -m unittest discover -s tools/ci/tests -k permissions               # one script's tests
+python3 -I tools/ci/check_third_party.py [--render]                            # validate / regenerate docs/third-party.md
+python3 -I tools/ci/check_permissions.py --profile app|spikes --manifest|--apk <file>
+```
+
+Pure Kotlin modules (`core:model`, `core:policy`), Gradle 9.6 wrapper, no Android SDK needed:
+
+```
+./gradlew -Pechocatch.android=false :core:model:test :core:policy:test
+./gradlew -Pechocatch.android=false :core:policy:test --tests '*ArmingStateTest'     # one test class
+```
+
+Android modules (`:app`, `:spikes`) need an Android SDK. `settings.gradle.kts` includes them only when `ANDROID_HOME`, `ANDROID_SDK_ROOT` or `local.properties` provides one (override with `-Pechocatch.android=true|false`):
+
+```
+./gradlew :app:assembleDebug :app:lintDebug :spikes:assembleDebug :spikes:lintDebug
+```
+
+Environment notes (cloud sandbox):
+- The sandbox has no Android SDK and cannot reach `dl.google.com`, so Android modules are verified by GitHub Actions (`.github/workflows/ci.yml`). Read results with the GitHub `actions_list` and `get_job_logs` tools; request `tail_lines` of 300 or more to reach the Gradle error above the post-job output.
+- Maven Central intermittently answers HTTP 429 through the sandbox proxy. Gradle caches what it downloads, so re-run the build (a loop of a few attempts works) before suspecting the build files.
+- Do not declare `org.jetbrains.kotlin.jvm` (or any Kotlin plugin) with `apply false` in the root build. It loads Kotlin in a parent classloader and AGP 9 then fails with `NoClassDefFoundError: BaseVariant`. Each module applies the plugins it needs.
 
 ## Where things are
 
@@ -14,7 +46,7 @@ Start with `docs/README.md`, which indexes everything.
 
 - `docs/plan/`: vision, requirements and budgets, platform facts, architecture, spikes, roadmap, test strategy, risks, agent workflow, open decisions.
 - `docs/adr/`: Architecture Decision Records. An `Accepted` ADR is binding. To change one, write a superseding ADR first.
-- `docs/spikes/results/`: evidence from hardware experiments (empty until M0 spikes run).
+- `docs/spikes/`: `runbook-oneplus-11r-buds-4.md` (how the owner runs the EchoCatch Lab app on their devices) and `results/` (evidence from hardware experiments, empty until they have been run).
 
 Read `docs/plan/08-ai-agent-workflow.md` before starting any task. Work is organised as roadmap tasks (`M0-T1` …) in `docs/plan/05-roadmap.md`, each sized for one PR.
 

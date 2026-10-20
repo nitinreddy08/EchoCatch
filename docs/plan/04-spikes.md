@@ -6,6 +6,10 @@ A spike is a time-boxed experiment that answers one question so an ADR can be de
 
 Who does what: an AI agent writes the spike app and the analysis scripts. The user runs the app on their own phone and earbuds and sends back the exported report. The cloud sandbox has no phone, no earbuds, and no Bluetooth.
 
+## Implementation status
+
+The experiment app "EchoCatch Lab" (`spikes/`) implements S1, S2, S3, S5 and the R0 to R2 parts of S6, and shares a JSON report with no audio. The owner's step-by-step instructions are in [runbook-oneplus-11r-buds-4](../spikes/runbook-oneplus-11r-buds-4.md). Not covered by the app: S4 (host-side benchmark, built in M2), S6 runs R3 to R5 (need the native pipeline and Oboe), and S7 (the same app is reused by volunteers later).
+
 ## Primary test devices
 
 The owner's devices are the first data point for every hardware spike:

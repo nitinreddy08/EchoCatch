@@ -4,6 +4,21 @@ Status: Draft v0.1 · 2026-10-20
 
 Each task is sized for one pull request (roughly ≤ 400 changed lines) so an AI agent can pick it up with the task card from `08-ai-agent-workflow.md`. `HW` marks tasks that need the user's phone or earbuds. Task IDs are stable; reference them in commits and PRs.
 
+## Status (2026-10-20)
+
+| Task | State |
+|---|---|
+| M0-T1 repo hygiene | done |
+| M0-T2 Gradle skeleton and CI | done (CI green: native, pure Kotlin and Android jobs; Android verified by GitHub Actions only) |
+| M0-T3 native skeleton | done (host build, tests and sanitizers pass; the Android ABI build of the native core is wired in M1 through Gradle) |
+| M0-T4 `docs/third-party.md` and licence checker | done |
+| M0-T5 permission guard | done (runs in CI on both APKs) |
+| M0-T6 spike shell app and JSON report | done (`:spikes`, "EchoCatch Lab") |
+| M0-T7a S1 route test, T7c S3 ducking test, T7b S2 service lifecycle (with S5 coexistence logging) and T7f S6 battery sampling | done, awaiting hardware runs. S6 covers runs R0 to R2 only; R3 and R4 need the native pipeline (M2), and R5 (Oboe versus `AudioRecord`) needs native code (M1) |
+| M0-T7d S4 detector benchmark | not started. It is host-side work belonging to M2 (corpus tooling and the bench CLI) and does not need a phone |
+| M0-T8 hardware runs | waiting for the owner: `docs/spikes/runbook-oneplus-11r-buds-4.md` |
+| M0-T9 ratify ADRs | blocked on M0-T8 and S4 |
+
 ## Milestone map
 
 ```
