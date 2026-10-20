@@ -1,23 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
-
-plugins {
-    // Declared here so the Kotlin plugin is loaded once and shared by every module (including AGP's built-in Kotlin).
-    alias(libs.plugins.kotlin.jvm) apply false
-}
-
-// Common settings for the pure Kotlin/JVM modules.
-subprojects {
-    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-        extensions.configure<KotlinJvmProjectExtension> {
-            compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
-                allWarningsAsErrors.set(true)
-            }
-        }
-        tasks.withType<JavaCompile>().configureEach { options.release.set(17) }
-        tasks.withType<Test>().configureEach { useJUnitPlatform() }
-    }
-}
+// Intentionally empty. Do NOT declare the Kotlin or Android plugins here with "apply false": that loads the Kotlin
+// plugin in a parent classloader that cannot see the Android plugin, and AGP 9 fails with
+// NoClassDefFoundError: com/android/build/gradle/api/BaseVariant. Each module applies the plugins it needs.
+// Shared settings for the pure Kotlin/JVM modules are repeated in their build files (there are only two).
