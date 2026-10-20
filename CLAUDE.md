@@ -35,6 +35,8 @@ Three things need more than one file to understand:
 - Never add the `INTERNET` permission or any networking, analytics, or crash-reporting library (ADR-0007). CI will check the permission list once M0-T5 lands.
 - The project is GPL-3.0-only (ADR-0010). New source files start with `SPDX-License-Identifier: GPL-3.0-only`.
 - Never add a dependency, model file, dataset, or permission without a licence-checked entry in `docs/third-party.md` and the justification the plan requires. The licence must be on the GPL-3.0-compatible allowlist in ADR-0010. Exclude non-commercial licences (for example openWakeWord's pretrained models).
+- Distribution is F-Droid and GitHub Releases first, Google Play later (ADR-0011). Keep choices Play-compatible: user-initiated mic service with a visible notification and in-app disclosure, no reliance on `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`.
+- Primary test devices: OnePlus 11R and OnePlus Buds 4. They are one data point, not proof of broad compatibility.
 - Feature-detect; never branch on phone or earbud model names. Put API-level differences behind adapters, not scattered `SDK_INT` checks. No Google Play Services dependency. The phone-mic baseline must keep working on every supported API level (ADR-0009).
 - Decide by measurement (ADR-0001). Numbers marked ⚠ in `docs/plan/01-requirements.md` are placeholders until the M0 spikes finish. Do not present them as measured.
 - Keep the audio thread allocation-free and lock-free in the steady state. Never persist or log raw audio.

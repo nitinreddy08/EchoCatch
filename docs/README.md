@@ -31,6 +31,7 @@ Project phase: **planning** (no product code yet). Date of this index: 2026-10-2
 | [0008](adr/0008-prerecorded-alert-cue.md) | Pre-recorded alert cue, not text-to-speech | Accepted |
 | [0009](adr/0009-broad-device-compatibility.md) | Broad device compatibility: universal baseline, capability tiers, per-headset profiles, minSdk 26 | Accepted |
 | [0010](adr/0010-license-gpl-3.0.md) | License the project under GPL-3.0-only | Accepted |
+| [0011](adr/0011-distribution-fdroid-github-then-play.md) | F-Droid and GitHub first; stay Google-Play-compatible for later | Accepted |
 
 New ADRs start from [0000-template](adr/0000-template.md).
 

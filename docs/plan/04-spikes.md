@@ -6,6 +6,17 @@ A spike is a time-boxed experiment that answers one question so an ADR can be de
 
 Who does what: an AI agent writes the spike app and the analysis scripts. The user runs the app on their own phone and earbuds and sends back the exported report. The cloud sandbox has no phone, no earbuds, and no Bluetooth.
 
+## Primary test devices
+
+The owner's devices are the first data point for every hardware spike:
+- Phone: **OnePlus 11R** (Android version to be recorded by the spike app).
+- Earbuds: **OnePlus Buds 4** (codec and LE Audio support to be recorded by the spike app; not assumed).
+
+Notes:
+- OnePlus phones run OxygenOS, which has its own battery manager. That makes this phone a good first test of background persistence (R19), but it is one vendor.
+- This phone is a high-end-class device. It cannot stand in for the low-end reference needed by NFR-16.
+- One pair of earbuds proves nothing about "all non-Apple TWS". S7 widens the data over time.
+
 ## Order and dependencies
 
 ```
@@ -96,6 +107,17 @@ S4 accuracy work needs no hardware and can start immediately. S7 (compatibility 
 - **C2:** VAD → tiny prefilter → C1, introduced only if C1 after VAD busts a budget.
 - **C3:** a custom tiny streaming model trained offline on synthetic speech for a given name (microWakeWord-style). Only a fallback, because per-name training does not fit a "type your name" product.
 - **Excluded by licence:** openWakeWord pretrained models (P28), Porcupine, Snowboy (P30).
+
+**Test names** (chosen to cover length and phonetic difficulty; the owner's own name is added later, D3b):
+
+| Group | Names |
+|---|---|
+| Short | Alex, Maya, Jack |
+| Medium | Daniel, Priya, Arjun, Sofia |
+| Long | Alexandra, Venkatesh |
+| Hard phonetics | Siobhan, Nguyen, Xiomara |
+
+Each name is also tested with a nickname where natural (for example Alexandra → Alex). **Near-miss negatives** for false alarms: Maya↔Mia, Jack↔Zack, Daniel↔Danielle, Sofia↔Sophie, Priya↔Pria, Arjun↔Argon.
 
 **To establish first (the unknowns):** how keywords are specified for C1 (P26), the licences of the model files (P27), and whether non-English or Indian-English names work with the English model (P25).
 

@@ -75,6 +75,17 @@ Every design decision that rests on an Android or library behaviour is listed he
 | P35 | OEM background-process killing varies widely by vendor (Xiaomi, Huawei, Oppo, Vivo, Samsung, OnePlus and others are known for it). The vendor-specific user steps change often. | PRIOR (dontkillmyapp.com could not be reached from the planning sandbox) | — |
 | P36 | HFP can be wideband (mSBC, 16 kHz) or narrowband (CVSD, 8 kHz) depending on the phone and earbuds, and some earbuds expose only one mic or switch mic roles. LE Audio availability depends on Android version, phone, and headset. | PRIOR — spikes S1 and S7 | — |
 
+## Distribution (ADR-0011)
+
+| # | Fact | Tag | Source |
+|---|---|---|---|
+| P37 | Google Play requires declarations for foreground service types for apps targeting Android 14+, which may include a justification or demonstration for the microphone type. | UNVERIFIED (the Play policy page could not be fetched from the planning sandbox) | — |
+| P38 | Google Play restricts use of the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission to specific use cases. Sending the user to the system battery settings screen does not need that permission. | UNVERIFIED | — |
+| P39 | Google Play expects prominent in-app disclosure and consent before sensitive data access such as microphone recording, plus a privacy policy. | UNVERIFIED | — |
+| P40 | F-Droid builds from source, rejects proprietary components, and signs with its own key unless the build is reproducible. Play re-signs with a Play-managed key. | PRIOR | — |
+
+Re-verify P37–P40 against current official policy in M6-T7 before any submission.
+
 ## Test players (all open source, so the spikes are reproducible)
 
 VLC, AntennaPod (podcasts), NewPipe (video), plus the user's real players (Spotify, YouTube, YouTube Music) for the S3 matrix.

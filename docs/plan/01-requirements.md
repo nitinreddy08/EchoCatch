@@ -55,7 +55,7 @@ Definitions (all measured by tools in `06-quality-and-testing.md`):
 
 - 100 % free and open source, licensed GPL-3.0-only (ADR-0010). All dependencies and model files must be under licences compatible with GPL-3.0 (allowlist in ADR-0010) and recorded in `docs/third-party.md` (created in M0).
 - Offline: no `INTERNET` permission, ever (ADR-0007).
-- Permission budget (each needs written justification): `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS` (API 33+). Possible, pending spikes: `MODIFY_AUDIO_SETTINGS`, `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`. Avoided unless a spike proves they are needed: `BLUETOOTH_CONNECT`, `READ_PHONE_STATE`.
+- Permission budget (each needs written justification): `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS` (API 33+). Possible, pending spikes: `MODIFY_AUDIO_SETTINGS`. `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` is avoided (ADR-0011): onboarding sends users to the system battery settings instead. Avoided unless a spike proves they are needed: `BLUETOOTH_CONNECT`, `READ_PHONE_STATE`.
 - Compatibility goals below (ADR-0009). minSdk is 26; targetSdk is the current stable level, bumped yearly.
 
 ## Compatibility requirements (ADR-0009)

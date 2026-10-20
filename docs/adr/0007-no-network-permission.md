@@ -18,6 +18,10 @@ EchoCatch listens to the microphone continuously. Users have to be able to trust
 
 Option 2. The manifest is limited to an approved list: `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS`, plus any added later after a written justification in `docs/plan/01-requirements.md` (candidates: `MODIFY_AUDIO_SETTINGS`, `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`). CI builds the APK, dumps its permissions, and fails on `INTERNET` or any unlisted permission (M0-T5). Models ship inside the APK. There are no network libraries, no analytics, no crash-reporting SDKs, and no Play Services.
 
+## Clarification (2026-10-20, from ADR-0011)
+
+`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` is no longer a candidate. Onboarding sends users to the system battery settings screens instead.
+
 ## Consequences
 
 - Model updates and new language packs ship with app releases, not as downloads.

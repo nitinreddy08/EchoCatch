@@ -140,6 +140,7 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | M6-T3 | README, user guide, privacy statement ("no data leaves the device"), and the no-guarantee disclaimer. |
 | M6-T4 | Beta programme: issue templates, device-report template, a public known-issues list, and the `docs/compat/` compatibility matrix (tested versus user-reported, ADR-0009). |
 | M6-T5 | v1.0 tag, once all release gates in `06-quality-and-testing.md` pass. |
+| M6-T7 | Google Play readiness (ADR-0011), done after v1.0 on F-Droid and GitHub: re-verify current Play policy (foreground service declaration, battery-optimization rules, disclosure, privacy policy), prepare the Data safety answers, decide the signing-key and application-ID strategy across stores, and decide the contributor-licensing policy. Requires the owner. |
 
 ---
 
