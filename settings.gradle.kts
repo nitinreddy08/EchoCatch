@@ -42,7 +42,7 @@ val includeAndroid = providers.gradleProperty("echocatch.android").orNull?.toBoo
 include(":core:model", ":core:policy")
 
 if (includeAndroid) {
-    include(":app")
+    include(":app", ":spikes")
 } else {
     logger.lifecycle("EchoCatch: Android modules skipped (no Android SDK found, or -Pechocatch.android=false).")
 }
