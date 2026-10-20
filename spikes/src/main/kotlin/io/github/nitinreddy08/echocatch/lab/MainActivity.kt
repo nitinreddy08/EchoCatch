@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Typeface
+import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaRecorder
@@ -15,6 +16,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Spinner
@@ -37,6 +39,10 @@ class MainActivity : Activity() {
     private lateinit var presetSpinner: Spinner
     private lateinit var secondsSpinner: Spinner
     private lateinit var rateSpinner: Spinner
+    private lateinit var playerField: EditText
+    private lateinit var gainSpinner: Spinner
+    private lateinit var usageSpinner: Spinner
+    private lateinit var contentSpinner: Spinner
     private lateinit var serviceModeSpinner: Spinner
     private lateinit var hopSpinner: Spinner
     private lateinit var cycleSpinner: Spinner
@@ -46,6 +52,26 @@ class MainActivity : Activity() {
         "UNPROCESSED" to MediaRecorder.AudioSource.UNPROCESSED,
         "MIC" to MediaRecorder.AudioSource.MIC,
         "VOICE_COMMUNICATION" to MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+    )
+
+    private val gains = listOf(
+        "GAIN_TRANSIENT_MAY_DUCK" to AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK,
+        "GAIN_TRANSIENT" to AudioManager.AUDIOFOCUS_GAIN_TRANSIENT,
+        "GAIN_TRANSIENT_EXCLUSIVE" to AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE,
+        "GAIN" to AudioManager.AUDIOFOCUS_GAIN,
+    )
+    private val usages = listOf(
+        "ASSISTANCE_NAVIGATION_GUIDANCE" to AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE,
+        "ASSISTANCE_ACCESSIBILITY" to AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY,
+        "ASSISTANT" to AudioAttributes.USAGE_ASSISTANT,
+        "NOTIFICATION" to AudioAttributes.USAGE_NOTIFICATION,
+        "ALARM" to AudioAttributes.USAGE_ALARM,
+        "MEDIA" to AudioAttributes.USAGE_MEDIA,
+    )
+    private val contentTypes = listOf(
+        "SPEECH" to AudioAttributes.CONTENT_TYPE_SPEECH,
+        "SONIFICATION" to AudioAttributes.CONTENT_TYPE_SONIFICATION,
+        "MUSIC" to AudioAttributes.CONTENT_TYPE_MUSIC,
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +114,25 @@ class MainActivity : Activity() {
         column.addView(button("Music sounded like a phone call") { noteQuality("phone-call-quality") })
         column.addView(button("Music stopped or paused") { noteQuality("stopped-or-paused") })
 
+        column.addView(heading("S3: ducking and pausing"))
+        column.addView(note("1) Play music or a podcast in another app (note which). 2) Pick a focus type and alert attributes. 3) Tap Play alert and listen. 4) Tap what the other app did. Repeat for each combination you care about."))
+        playerField = EditText(this).apply { hint = "Player under test (for example Spotify)" }
+        column.addView(playerField)
+        gainSpinner = spinner(gains.map { it.first })
+        usageSpinner = spinner(usages.map { it.first })
+        contentSpinner = spinner(contentTypes.map { it.first })
+        column.addView(labelled("Focus type", gainSpinner))
+        column.addView(labelled("Usage", usageSpinner))
+        column.addView(labelled("Content type", contentSpinner))
+        column.addView(button("Play alert now") { runDucking() })
+        column.addView(button("Music got quieter, alert clear (ducked)") { noteDucking("ducked") })
+        column.addView(button("Music paused, then resumed (paused)") { noteDucking("paused-and-resumed") })
+        column.addView(button("Music unchanged, alert on top (ignored)") { noteDucking("ignored") })
+        column.addView(button("Music did not resume afterwards") { noteDucking("did-not-resume") })
+        column.addView(button("Alert hard to hear") { noteDucking("alert-hard-to-hear") })
+        column.addView(button("Show active players (usage and content type)") { scanPlayers() })
+        column.addView(button("Volume-duck fallback test (lowers music volume briefly)") { runVolumeDuck() })
+
         column.addView(heading("S2, S5, S6: service, coexistence, power"))
         column.addView(note("Starts a microphone foreground service and logs every event (start path, mic open and close, silenced capture, device and playback changes, battery). Modes: idle = service only; mic_open = microphone open all the time, audio discarded; cycle = opens the mic briefly every N seconds."))
         serviceModeSpinner = spinner(listOf(LabService.MODE_CYCLE, LabService.MODE_MIC_OPEN, LabService.MODE_IDLE))
@@ -127,6 +172,66 @@ class MainActivity : Activity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) list += Manifest.permission.BLUETOOTH_CONNECT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) list += Manifest.permission.POST_NOTIFICATIONS
         return list.toTypedArray()
+    }
+
+    private fun runDucking() {
+        val (gainName, gain) = gains[gainSpinner.selectedItemPosition]
+        val (usageName, usage) = usages[usageSpinner.selectedItemPosition]
+        val (contentName, content) = contentTypes[contentSpinner.selectedItemPosition]
+        val request = DuckingTest.Request(gain, gainName, usage, usageName, content, contentName, playerField.text.toString())
+        appendLog("Running S3: $gainName / $usageName / $contentName ...")
+        worker.execute {
+            val result = DuckingTest(this).run(request)
+            report.add("s3Tests", result)
+            report.save(this)
+            runOnUiThread {
+                appendLog("S3 focus result: ${result.optString("focusResult")}. Now tap what the other app did.")
+            }
+        }
+    }
+
+    private fun noteDucking(value: String) {
+        val last: JSONObject? = report.lastIn("s3Tests")
+        if (last == null) {
+            appendLog("No S3 test yet.")
+            return
+        }
+        val notes = last.optJSONArray("observations") ?: JSONArray().also { last.put("observations", it) }
+        notes.put(value)
+        report.save(this)
+        appendLog("Noted for last S3 test: $value")
+    }
+
+    private fun scanPlayers() {
+        val players = JSONArray()
+        for (config in audioManager.activePlaybackConfigurations) {
+            val attributes = config.audioAttributes
+            players.put(JSONObject().put("usage", attributes.usage).put("contentType", attributes.contentType))
+        }
+        val scan = JSONObject().put("player", playerField.text.toString()).put("musicActive", audioManager.isMusicActive).put("players", players)
+        report.add("s3PlayerScans", scan)
+        report.save(this)
+        appendLog("Active players: $players (usage 1 = media, contentType 1 = speech, 2 = music)")
+    }
+
+    private fun runVolumeDuck() {
+        val stream = AudioManager.STREAM_MUSIC
+        val max = audioManager.getStreamMaxVolume(stream)
+        val before = audioManager.getStreamVolume(stream)
+        worker.execute {
+            val info = JSONObject().put("max", max).put("before", before).put("volumeFixed", audioManager.isVolumeFixed)
+            try {
+                audioManager.setStreamVolume(stream, maxOf(1, before * 3 / 10), 0)
+                info.put("during", audioManager.getStreamVolume(stream))
+                android.os.SystemClock.sleep(1500)
+            } finally {
+                audioManager.setStreamVolume(stream, before, 0)
+            }
+            info.put("after", audioManager.getStreamVolume(stream))
+            report.add("s3VolumeDuck", info)
+            report.save(this)
+            runOnUiThread { appendLog("Volume duck: $info. Did the music get quieter? Did it restore?") }
+        }
     }
 
     private fun startService() {
