@@ -30,11 +30,16 @@ object DeviceInfo {
 
     fun audioDevices(audioManager: AudioManager): JSONArray {
         val array = JSONArray()
-        for (device in audioManager.getDevices(AudioManager.GET_DEVICES_ALL)) {
+        for (device in allDevices(audioManager)) {
             array.put(describe(device))
         }
         return array
     }
+
+    /** Inputs and outputs together (lint rejects GET_DEVICES_ALL as a flag value, so combine the two valid flags). */
+    fun allDevices(audioManager: AudioManager): List<AudioDeviceInfo> =
+        audioManager.getDevices(AudioManager.GET_DEVICES_INPUTS).toList() +
+            audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).toList()
 
     fun describe(device: AudioDeviceInfo): JSONObject = JSONObject()
         .put("id", device.id)

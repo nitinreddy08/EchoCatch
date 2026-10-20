@@ -126,7 +126,7 @@ class MainActivity : Activity() {
             deviceButtons.addView(button(label) { runRouteTest(device) })
         }
         appendLog("Found ${inputs.size} input device(s) and ${audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS).size} output device(s).")
-        for (device in audioManager.getDevices(AudioManager.GET_DEVICES_ALL)) {
+        for (device in DeviceInfo.allDevices(audioManager)) {
             appendLog("  ${if (device.isSource) "in " else "out"} ${DeviceInfo.typeName(device.type)} ${device.productName}")
         }
     }
