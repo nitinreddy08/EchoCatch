@@ -1,0 +1,36 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "host",
+      "displayName": "Host build (Ninja, Debug)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build-host/default",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "host-sanitize",
+      "displayName": "Host build with ASan and UBSan",
+      "inherits": "host",
+      "binaryDir": "${sourceDir}/build-host/sanitize",
+      "cacheVariables": { "ECHOCATCH_SANITIZE": "ON" }
+    },
+    {
+      "name": "host-release",
+      "displayName": "Host build (Ninja, Release)",
+      "inherits": "host",
+      "binaryDir": "${sourceDir}/build-host/release",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "host", "configurePreset": "host" },
+    { "name": "host-sanitize", "configurePreset": "host-sanitize" },
+    { "name": "host-release", "configurePreset": "host-release" }
+  ],
+  "testPresets": [
+    { "name": "host", "configurePreset": "host", "output": { "outputOnFailure": true } },
+    { "name": "host-sanitize", "configurePreset": "host-sanitize", "output": { "outputOnFailure": true } },
+    { "name": "host-release", "configurePreset": "host-release", "output": { "outputOnFailure": true } }
+  ]
+}
