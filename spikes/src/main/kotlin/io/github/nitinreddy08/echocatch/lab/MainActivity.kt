@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Spinner
 import android.widget.TextView
+import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.Executors
 
@@ -36,6 +37,9 @@ class MainActivity : Activity() {
     private lateinit var presetSpinner: Spinner
     private lateinit var secondsSpinner: Spinner
     private lateinit var rateSpinner: Spinner
+    private lateinit var serviceModeSpinner: Spinner
+    private lateinit var hopSpinner: Spinner
+    private lateinit var cycleSpinner: Spinner
 
     private val presets = listOf(
         "VOICE_RECOGNITION" to MediaRecorder.AudioSource.VOICE_RECOGNITION,
@@ -84,6 +88,23 @@ class MainActivity : Activity() {
         column.addView(button("Music sounded like a phone call") { noteQuality("phone-call-quality") })
         column.addView(button("Music stopped or paused") { noteQuality("stopped-or-paused") })
 
+        column.addView(heading("S2, S5, S6: service, coexistence, power"))
+        column.addView(note("Starts a microphone foreground service and logs every event (start path, mic open and close, silenced capture, device and playback changes, battery). Modes: idle = service only; mic_open = microphone open all the time, audio discarded; cycle = opens the mic briefly every N seconds."))
+        serviceModeSpinner = spinner(listOf(LabService.MODE_CYCLE, LabService.MODE_MIC_OPEN, LabService.MODE_IDLE))
+        hopSpinner = spinner(listOf("100", "20", "200"))
+        cycleSpinner = spinner(listOf("60", "30", "300"))
+        column.addView(labelled("Mode", serviceModeSpinner))
+        column.addView(labelled("Read size, mic_open (ms)", hopSpinner))
+        column.addView(labelled("Cycle every (s)", cycleSpinner))
+        column.addView(button("Start service (from this screen)") { startService() })
+        column.addView(button("Stop service") { stopServiceFromUi() })
+        column.addView(button("Show last events") { showEvents() })
+        column.addView(button("Clear events") {
+            EventLog.clear(this)
+            appendLog("Events cleared.")
+        })
+        column.addView(note("Other start paths to try: (a) stop the service, then tap Start in the notification that appears; (b) add the EchoCatch Lab tile to Quick Settings and tap it; (c) restart the phone and read the events (boot_start_failed is expected)."))
+
         column.addView(heading("Report"))
         column.addView(button("Share report (JSON, no audio)") { shareReport() })
         column.addView(button("Clear report") {
@@ -104,7 +125,36 @@ class MainActivity : Activity() {
     private fun requiredPermissions(): Array<String> {
         val list = mutableListOf(Manifest.permission.RECORD_AUDIO)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) list += Manifest.permission.BLUETOOTH_CONNECT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) list += Manifest.permission.POST_NOTIFICATIONS
         return list.toTypedArray()
+    }
+
+    private fun startService() {
+        val mode = serviceModeSpinner.selectedItem.toString()
+        val hop = hopSpinner.selectedItem.toString().toInt()
+        val cycle = cycleSpinner.selectedItem.toString().toInt()
+        EventLog.append(this, "ui_start_requested", JSONObject().put("mode", mode).put("hopMs", hop).put("cycleSeconds", cycle))
+        try {
+            startForegroundService(LabService.startIntent(this, mode, hop, cycle))
+            appendLog("Service start requested: $mode. Press Home and leave it; read events later.")
+        } catch (e: Exception) {
+            EventLog.append(this, "ui_start_failed", JSONObject().put("exception", e.javaClass.simpleName).put("message", e.message ?: ""))
+            appendLog("Start failed: ${e.javaClass.simpleName}: ${e.message}")
+        }
+    }
+
+    private fun stopServiceFromUi() {
+        startService(Intent(this, LabService::class.java).setAction(LabService.ACTION_STOP))
+        appendLog("Stop requested.")
+    }
+
+    private fun showEvents() {
+        val lines = EventLog.lines(this, 40)
+        appendLog("--- last ${lines.size} events ---")
+        for (line in lines) {
+            val event = JSONObject(line)
+            appendLog("${event.optString("time").substringAfter(' ')} ${event.optString("type")} ${event.optJSONObject("data")}")
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -166,6 +216,9 @@ class MainActivity : Activity() {
     }
 
     private fun shareReport() {
+        val events = JSONArray()
+        for (line in EventLog.lines(this, 400)) events.put(JSONObject(line))
+        report.put("events", events)
         val send = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, "EchoCatch Lab report")

@@ -17,3 +17,4 @@ android.permission.POST_NOTIFICATIONS
 @app
 android.permission.MODIFY_AUDIO_SETTINGS
 android.permission.BLUETOOTH_CONNECT
+android.permission.RECEIVE_BOOT_COMPLETED
