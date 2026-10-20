@@ -35,3 +35,6 @@ __pycache__/
 Thumbs.db
 *.swp
 .vscode/
+
+# Kotlin compiler session files
+.kotlin/
