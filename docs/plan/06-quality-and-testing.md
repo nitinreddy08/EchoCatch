@@ -40,7 +40,7 @@ The S6 protocol is the single method used from M0 onward (see `04-spikes.md`). R
 
 - Android Lint, detekt, ktlint, clang-format, clang-tidy.
 - **Permission guard:** build the APK, dump permissions, and fail on `INTERNET` or any permission outside the approved list (ADR-0007).
-- **Licence guard:** every dependency and model file must appear in `docs/third-party.md` with an accepted licence.
+- **Licence guard:** every dependency and model file must appear in `docs/third-party.md` with a licence on the GPL-3.0-compatible allowlist in ADR-0010. New source files must carry `SPDX-License-Identifier: GPL-3.0-only`.
 - **No proprietary blobs:** no Google Play Services, Firebase, or closed-source SDKs (this also keeps F-Droid acceptance possible).
 - Reproducible build check for release builds (M6-T1).
 

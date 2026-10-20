@@ -11,4 +11,4 @@ A free, open-source Android app that listens to your surroundings while you wear
 
 > **Not a safety device.** EchoCatch may miss a call or alert falsely. Do not rely on it where missing a sound could put you at risk.
 
-License: to be decided (see [open decisions](docs/plan/09-open-decisions.md)).
+License: [GPL-3.0-only](LICENSE).

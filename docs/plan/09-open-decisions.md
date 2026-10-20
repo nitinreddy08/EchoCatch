@@ -8,7 +8,6 @@ Items the project cannot resolve without the user (or hardware). Each says what 
 
 | ID | Decision | Blocks | Recommendation |
 |---|---|---|---|
-| D1 | **Licence**: Apache-2.0 or GPL-3.0 (or another) | M0-T1, first public release | GPL-3.0 if you want improvements to stay open and F-Droid is the main channel. Apache-2.0 if you want maximum reuse (including closed-source). Both are compatible with sherpa-onnx (Apache-2.0) and Silero VAD (MIT). |
 | D2 | **Test devices**: phone model and Android version; earbuds model and codec / LE Audio support. Because the goal is broad support, also list *any other* Android phones (especially an older Android version or an entry-level phone) and other non-Apple earbuds you or friends can lend for S1/S7. | S1–S7, all `HW` tasks | Please share these first. S1 results depend on them, and one low-end phone is needed for NFR-16. |
 | D3 | **Language and spelling** of the name (and nicknames) | S4, M3-T6 | Provide 1–3 real names to use as S4 test names. |
 | D4 | **minSdk** | M1 | **Set to 26 by ADR-0009** to meet the "most Android versions" goal. Confirm in M1-T9. Going lower is possible but needs legacy focus code and loses automatic ducking. Tell me if you want API 24 or 21 anyway. |
@@ -36,5 +35,6 @@ Items the project cannot resolve without the user (or hardware). Each says what 
 | Decision | Resolution | Where |
 |---|---|---|
 | Plan first, then code | Agreed 2026-10-20 | this plan |
+| D1 Licence: GPL-3.0-only | Chosen by the owner 2026-10-20 | ADR-0010, `LICENSE` |
 | Measure-first, budgets, pluggable source, cascade, native core, pre-recorded cue | Agreed 2026-10-20 | ADR-0001…0003, 0006, 0008 |
 | Event-driven mic (mic open only when needed) | Agreed in principle 2026-10-20; final shape depends on S2 | ADR-0004 (Proposed) |

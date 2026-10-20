@@ -30,6 +30,7 @@ Project phase: **planning** (no product code yet). Date of this index: 2026-10-2
 | [0007](adr/0007-no-network-permission.md) | No `INTERNET` permission, CI-enforced permission list | Accepted |
 | [0008](adr/0008-prerecorded-alert-cue.md) | Pre-recorded alert cue, not text-to-speech | Accepted |
 | [0009](adr/0009-broad-device-compatibility.md) | Broad device compatibility: universal baseline, capability tiers, per-headset profiles, minSdk 26 | Accepted |
+| [0010](adr/0010-license-gpl-3.0.md) | License the project under GPL-3.0-only | Accepted |
 
 New ADRs start from [0000-template](adr/0000-template.md).
 
@@ -39,5 +40,5 @@ Empty until M0 spikes run. Format: see the template at the end of [04-spikes](pl
 
 ## Where to start
 
-1. Answer the user-owned items in [09-open-decisions](plan/09-open-decisions.md) (licence, devices, names).
+1. Answer the remaining user-owned items in [09-open-decisions](plan/09-open-decisions.md) (devices, names; the licence is decided).
 2. Execute M0 in [05-roadmap](plan/05-roadmap.md).

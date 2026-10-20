@@ -22,7 +22,7 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 
 | ID | Task | Notes |
 |---|---|---|
-| M0-T1 | Repo hygiene: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `.gitignore`, `.editorconfig`, issue and PR templates (PR template mirrors the Definition of Done). **LICENSE once the user decides.** | blocked on licence decision |
+| M0-T1 | Repo hygiene: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `.gitignore`, `.editorconfig`, issue and PR templates (PR template mirrors the Definition of Done). `LICENSE` (GPL-3.0) is already in place (ADR-0010); `CONTRIBUTING.md` states that contributions are accepted under GPL-3.0-only and that new files carry the SPDX header. | |
 | M0-T2 | Gradle skeleton: multi-module empty project (minSdk 26) that runs `./gradlew assembleDebug`; version catalog; CI workflow for build, lint, unit tests; emulator smoke job across a matrix of API levels (26 up to current). | |
 | M0-T3 | Native skeleton: `native/pipeline` + `tools/bench` build on host via CMake and for Android ABIs; GoogleTest wired; one trivial test in CI. | unlocks M2 |
 | M0-T4 | `docs/third-party.md` and a licence-check script (every dependency and model file has a recorded licence). | |
