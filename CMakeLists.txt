@@ -36,6 +36,10 @@ if(NOT ANDROID)
     COMMAND ${Python3_EXECUTABLE} -I -m unittest discover -s ${CMAKE_SOURCE_DIR}/tools/ci/tests -v
   )
   add_test(
+    NAME third_party_register_is_current
+    COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_SOURCE_DIR}/tools/ci/check_third_party.py
+  )
+  add_test(
     NAME native_core_has_no_android_dependencies
     COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_SOURCE_DIR}/tools/ci/check_native_purity.py ${CMAKE_SOURCE_DIR}/native/pipeline
   )

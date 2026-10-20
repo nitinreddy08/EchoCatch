@@ -1,0 +1,31 @@
+{
+  "_comment": "Source of truth for third-party components. Edit this file, then run: python3 tools/ci/check_third_party.py --render. Allowed licences are defined in ADR-0010.",
+  "components": [
+    {
+      "name": "GoogleTest",
+      "version": "1.15.2",
+      "license": "BSD-3-Clause",
+      "scope": "test",
+      "shipped": false,
+      "source": "https://github.com/google/googletest",
+      "purpose": "C++ unit tests for the native core (host only, not shipped in the app)"
+    }
+  ],
+  "rejected": [
+    {
+      "name": "openWakeWord pretrained models",
+      "license": "CC-BY-NC-SA-4.0",
+      "reason": "Non-commercial and share-alike terms conflict with the project's licensing constraints (docs/plan/02-platform-facts.md, P28). The openWakeWord code may still be used to train our own models."
+    },
+    {
+      "name": "Picovoice Porcupine",
+      "license": "proprietary",
+      "reason": "Requires an access key validated online; excluded by the offline and open-source constraints (P30, prior knowledge, not re-verified)."
+    },
+    {
+      "name": "Snowboy",
+      "license": "unknown",
+      "reason": "Discontinued (P30, prior knowledge, not re-verified)."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Approved Android permissions per build profile (ADR-0007, docs/plan/01-requirements.md).
+# Adding a permission needs a written justification in docs/plan/01-requirements.md in the same PR.
+# INTERNET is never allowed in any profile (hard-coded in tools/ci/check_permissions.py).
+#
+# "@name" includes another profile. A "*.SUFFIX" entry matches any permission name ending in ".SUFFIX"
+# (used for permissions that AndroidX generates from the application ID).
+
+[app]
+android.permission.RECORD_AUDIO
+android.permission.FOREGROUND_SERVICE
+android.permission.FOREGROUND_SERVICE_MICROPHONE
+android.permission.POST_NOTIFICATIONS
+*.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+
+# Throwaway spike app for milestone M0 (docs/plan/04-spikes.md). Never shipped.
+[spikes]
+@app
+android.permission.MODIFY_AUDIO_SETTINGS
+android.permission.BLUETOOTH_CONNECT
