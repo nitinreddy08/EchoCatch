@@ -5,6 +5,7 @@ A free, open-source Android app that listens to your surroundings while you wear
 - **Offline.** Everything runs on the device. The app is built without the `INTERNET` permission.
 - **Private.** Audio is held in memory only for a few seconds and is never stored or sent anywhere.
 - **Efficient.** The microphone is opened only when it is useful, and heavy processing runs only when someone is speaking.
+- **Broad support (goal).** Android 8.0 and newer, and any non-Apple TWS earbuds. The phone's own mic always works as a baseline. The earbuds' mic is used where the earbuds and phone allow it.
 
 > **Status: planning.** There is no app to install yet. See [docs/README.md](docs/README.md) for the plan, architecture decisions, and roadmap.
 

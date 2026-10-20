@@ -23,11 +23,11 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | ID | Task | Notes |
 |---|---|---|
 | M0-T1 | Repo hygiene: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `.gitignore`, `.editorconfig`, issue and PR templates (PR template mirrors the Definition of Done). **LICENSE once the user decides.** | blocked on licence decision |
-| M0-T2 | Gradle skeleton: multi-module empty project that runs `./gradlew assembleDebug`; version catalog; CI workflow for build, lint, unit tests. | |
+| M0-T2 | Gradle skeleton: multi-module empty project (minSdk 26) that runs `./gradlew assembleDebug`; version catalog; CI workflow for build, lint, unit tests; emulator smoke job across a matrix of API levels (26 up to current). | |
 | M0-T3 | Native skeleton: `native/pipeline` + `tools/bench` build on host via CMake and for Android ABIs; GoogleTest wired; one trivial test in CI. | unlocks M2 |
 | M0-T4 | `docs/third-party.md` and a licence-check script (every dependency and model file has a recorded licence). | |
 | M0-T5 | CI guard: fail if built APK requests `INTERNET` or any non-approved permission. | ADR-0007 |
-| M0-T6 | Spike shell app with "export report as JSON" via the share sheet. | |
+| M0-T6 | Spike shell app with "export report as JSON" via the share sheet. The report schema is stable and contains no audio, so volunteers with other phones and earbuds can run it (S1, S7). | |
 | M0-T7a…f | Implement spikes S1–S6 (one task each, per `04-spikes.md`). | |
 | M0-T8 `HW` | Run spikes on the user's devices; commit results to `docs/spikes/results/`. | user runs |
 | M0-T9 | Ratify ADRs: flip `Proposed` to `Accepted`, fill numeric budgets in `01-requirements.md` and ADR-0001. | |
@@ -49,6 +49,8 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | M1-T5 | Status UI with the true state (FR-9) and a debug level meter. |
 | M1-T6 | Instrumented smoke test on the emulator: service starts, runs, stops cleanly. |
 | M1-T7 | Replace the placeholders in `CLAUDE.md` with the real build, test, and lint commands. |
+| M1-T8 | API-level adapter pattern (ADR-0009): interfaces for Bluetooth route control, recording callbacks, and notification/permission handling, with one implementation per behaviour range. Robolectric tests run at the relevant SDK levels. A lint rule or test forbids direct `Build.VERSION.SDK_INT` checks outside adapters. |
+| M1-T9 | Confirm minSdk 26 against the emulator matrix and the owner's devices. Record any API 26–28 problems as issues. |
 
 **Exit criteria:** enable → persistent notification → mic frames flowing → Stop releases everything; 8 h idle run with no crash; CI green.
 
@@ -100,10 +102,12 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | ID | Task |
 |---|---|
 | M4-T1 | `RouteMonitor` over `AudioDeviceCallback`; `SourceSelector` driven by S1 policy data. |
-| M4-T2 | `BluetoothMicSource` for classic (`setCommunicationDevice` / SCO) and LE Audio (`setPreferredDevice`), as S1 supports. |
+| M4-T2 | `BluetoothMicSource` for classic (legacy `startBluetoothSco` below API 31, `setCommunicationDevice` from API 31) and LE Audio (`setPreferredDevice`), as S1 supports. Tier fallback chain: LE Audio → classic → phone mic. |
 | M4-T3 | Prompt route teardown on idle so music quality is restored; test the release path. |
 | M4-T4 | Fallback logic and clear user messaging (what source is active and why). |
 | M4-T5 `HW` | Hardware matrix run with the user's earbuds. |
+| M4-T6 | "Test my headset" wizard (FR-11) and `HeadsetProfile` storage; `SourceSelector` uses the profile. Device-report export (JSON, no audio). |
+| M4-T7 `HW` | Run the wizard on every earbuds model the owner and volunteers can provide; add each to the S7 data set. |
 
 **Exit criteria:** the user's earbuds work with the chosen default; music quality and earbud battery match the S1 expectations.
 
@@ -116,7 +120,8 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | ID | Task |
 |---|---|
 | M5-T1 | Power tuning loop using the S6 protocol until NFR-9 and NFR-10 are met. |
-| M5-T2 | Doze and OEM resilience: onboarding for battery optimization (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` if justified), per-OEM guidance, restart paths per ADR-0004. |
+| M5-T2 | Doze and OEM resilience: onboarding for battery optimization (`REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` if justified), a maintained per-vendor guidance document (Xiaomi, Huawei, Oppo, Vivo, Samsung, OnePlus, others), restart paths per ADR-0004. Verify the vendor steps against real devices or reports, not memory (P35). |
+| M5-T7 `HW` | Low-end device pass: run the benchmark and the S6 power protocol on a low-end reference device; tune against NFR-16. |
 | M5-T3 | Coexistence (S5 results): calls, other recorders, silenced capture detection and recovery. |
 | M5-T4 | Robustness: watchdog, process-death story, state recovery, notification when stopped unexpectedly. |
 | M5-T5 | Accessibility (TalkBack, large text) and string resources ready for translation. |
@@ -133,7 +138,7 @@ M2 depends only on M0-T3 (native skeleton) and not on any Android work, so it ca
 | M6-T1 | F-Droid metadata and a reproducible build. |
 | M6-T2 | Release signing process and GitHub Releases workflow. |
 | M6-T3 | README, user guide, privacy statement ("no data leaves the device"), and the no-guarantee disclaimer. |
-| M6-T4 | Beta programme: issue templates, device-report template, a public known-issues list. |
+| M6-T4 | Beta programme: issue templates, device-report template, a public known-issues list, and the `docs/compat/` compatibility matrix (tested versus user-reported, ADR-0009). |
 | M6-T5 | v1.0 tag, once all release gates in `06-quality-and-testing.md` pass. |
 
 ---

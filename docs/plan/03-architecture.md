@@ -53,7 +53,8 @@ Module dependency rule: `app` → `service` → (`core/*`); `core/policy` and `c
 | Settings | Jetpack DataStore |
 | DI | Manual constructor injection wired in `app/` (small graph, fewer dependencies) |
 | Build | Gradle (Kotlin DSL, version catalog); CMake for native |
-| ABIs | `arm64-v8a` (device) and `x86_64` (emulator); add `armeabi-v7a` only if the audience needs it |
+| minSdk | 26 (Android 8.0), per ADR-0009 |
+| ABIs | `arm64-v8a` and `armeabi-v7a` (devices), `x86_64` (emulator), per ADR-0009 |
 | Native tests | GoogleTest |
 | Kotlin tests | JUnit; Robolectric only where Android classes are unavoidable |
 | Lint/format | Android Lint, detekt, ktlint, clang-format, clang-tidy |
@@ -119,7 +120,7 @@ interface AudioSource {
 }
 ```
 
-`RouteMonitor` watches `AudioDeviceCallback` and emits the set of available inputs. A `SourceSelector` picks one based on the user's preference, what S1 proved about quality and battery, and what is available. All of that is policy data, not code branches buried in `AudioRecord` calls.
+`RouteMonitor` watches `AudioDeviceCallback` and emits the set of available inputs. A `SourceSelector` picks one based on the user's preference, the stored `HeadsetProfile` for the connected headset (see §11), what S1 proved about quality and battery, and what is available. All of that is policy data, not code branches buried in `AudioRecord` calls.
 
 ## 9. Permissions and manifest (ADR-0007)
 
@@ -130,13 +131,33 @@ Declared: `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`,
 | Failure | Behaviour |
 |---|---|
 | Mic permission revoked at runtime | Stop, notify, return to Disarmed |
-| Capture silenced (call, other recorder) | Go to ArmedIdle, retry with backoff, no error spam |
+| Capture silenced (call, other recorder, an app with a visible UI) | Detected through `AudioRecordingCallback` / `isClientSilenced()` (P21a). Go to ArmedIdle, retry with backoff, no error spam. Never fight a call for the mic. |
 | Source disappears (earbuds removed) | Close route, reselect source, else ArmedIdle |
 | Native pipeline error | Log counter, restart pipeline once, then ArmedIdle |
 | Focus lost mid-cue | Finish or stop cue, release focus, Cooldown |
 | Process death | Service does not silently restart a mic service from the background (P2/P4). The user sees the state as Disarmed and can re-enable in one tap. A "stopped unexpectedly" notification is posted if allowed. |
 
-## 11. What is explicitly deferred
+## 11. Compatibility architecture (ADR-0009)
+
+Goal: most Android versions (API 26+) and any non-Apple TWS. We cannot test everything, so the design guarantees a floor and detects the rest.
+
+**Capability tiers for the microphone**
+
+| Tier | Source | Works when | On failure |
+|---|---|---|---|
+| 0 (universal) | Phone mic, with the alert out of whatever output is active | Always, on every supported API level, with any earbuds | none; this is the floor |
+| 1 | Headset mic over classic Bluetooth (HFP/SCO): legacy `startBluetoothSco` path below API 31, `setCommunicationDevice` from API 31 | The headset exposes a mic over HFP | fall back to Tier 0 |
+| 2 | Headset mic over LE Audio via `setPreferredDevice` | Phone, OS, and headset all support LE Audio input | fall back to Tier 1, then Tier 0 |
+
+**Rules**
+- Feature detection only. No branching on phone or earbud model names. What differs between devices is expressed as capabilities (`SourceCapabilities`) and data (`HeadsetProfile`).
+- **`HeadsetProfile`** (stored locally in DataStore, keyed by what Android reports about the output/input device such as type and product name): preferred source, measured sample rate, whether music survived the route, last test date. Created by the "Test my headset" wizard (FR-11) and used by `SourceSelector`.
+- **API-level adapters:** code that differs by API level (Bluetooth route control, recording callbacks, notification and permission handling) sits behind small interfaces in `core/audio`, `core/alert`, and `service`, each with one implementation per behaviour range. Business logic never checks `Build.VERSION.SDK_INT` directly.
+- **No proprietary dependencies** (no Play Services), so non-Google devices work.
+- **Apple earbuds** are neither targeted nor excluded in code. They are generic Bluetooth devices.
+- **Low-end devices:** the CPU budget (NFR-16) is measured on a low-end reference device, and models are chosen with that in mind.
+
+## 12. What is explicitly deferred
 
 - Speaker/own-voice rejection (needs a separate ADR and a model).
 - On-device training or adaptation of keyword models.

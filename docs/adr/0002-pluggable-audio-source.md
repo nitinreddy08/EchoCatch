@@ -19,6 +19,10 @@ The original idea was to listen through the headset mic. Platform facts show tha
 
 Option 3. The interface and selector are specified in `docs/plan/03-architecture.md` §8. `close()` must release the route promptly so media quality is restored. The default for `auto` is set by the S1 decision rule: prefer headset mic only if music quality and earbud battery are acceptable; otherwise phone mic.
 
+## Clarification (2026-10-20, from ADR-0009)
+
+The phone mic is the universal Tier 0 baseline, and headset mic tiers always fall back to it. A per-headset profile created by the "Test my headset" wizard feeds `SourceSelector`. See ADR-0009 and `docs/plan/03-architecture.md` §11.
+
 ## Consequences
 
 - A little more structure in `core/audio`, in exchange for being able to follow evidence.

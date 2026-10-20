@@ -9,12 +9,12 @@ Items the project cannot resolve without the user (or hardware). Each says what 
 | ID | Decision | Blocks | Recommendation |
 |---|---|---|---|
 | D1 | **Licence**: Apache-2.0 or GPL-3.0 (or another) | M0-T1, first public release | GPL-3.0 if you want improvements to stay open and F-Droid is the main channel. Apache-2.0 if you want maximum reuse (including closed-source). Both are compatible with sherpa-onnx (Apache-2.0) and Silero VAD (MIT). |
-| D2 | **Test devices**: phone model and Android version; earbuds model and codec / LE Audio support; any second Android device | S1–S6, all `HW` tasks | Please share these first. S1 results depend on them. |
+| D2 | **Test devices**: phone model and Android version; earbuds model and codec / LE Audio support. Because the goal is broad support, also list *any other* Android phones (especially an older Android version or an entry-level phone) and other non-Apple earbuds you or friends can lend for S1/S7. | S1–S7, all `HW` tasks | Please share these first. S1 results depend on them, and one low-end phone is needed for NFR-16. |
 | D3 | **Language and spelling** of the name (and nicknames) | S4, M3-T6 | Provide 1–3 real names to use as S4 test names. |
-| D4 | **minSdk** | M1 | Proposal: 26, with feature detection for newer APIs (AAudio input device selection needs 28; LE Audio input is newer). Raise it if testing shows older versions are not worth supporting. |
+| D4 | **minSdk** | M1 | **Set to 26 by ADR-0009** to meet the "most Android versions" goal. Confirm in M1-T9. Going lower is possible but needs legacy focus code and loses automatic ducking. Tell me if you want API 24 or 21 anyway. |
 | D5 | **targetSdk** | M1 | The current stable targetSdk when M1 starts; bump every year. |
 | D6 | **Application ID** | M1 | `io.github.nitinreddy08.echocatch` (conventional for GitHub-hosted projects), or a domain you own. |
-| D7 | **Distribution** | M6 | F-Droid and GitHub Releases. Google Play has extra rules for background microphone use and battery-optimization exemptions, so it is out of scope for v1. |
+| D7 | **Distribution** | M6 | F-Droid and GitHub Releases first. Reaching "all Android phones" would be easier on Google Play, which has extra rules for background microphone services and battery-optimization exemptions that I have not verified. Revisit at M6 (the no-`INTERNET` design does not prevent it). |
 | D8 | **Multiple names** | FR-1, M3-T6 | Up to 3 keywords (name plus two nicknames) in v1. |
 | D9 | **Project governance** | M6 | Maintainer-led, with a short CONTRIBUTING and a code of conduct. |
 

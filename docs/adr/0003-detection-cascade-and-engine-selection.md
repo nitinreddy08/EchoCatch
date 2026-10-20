@@ -30,5 +30,6 @@ Design for the cascade, **build the simplest stage first.**
 - If S4 shows VAD → C1 is within budget, the system has two stages, not three. That is a success, not a deviation.
 - Latency has a floor from the VAD hangover and the verifier window. It is measured as T_detect.
 - The benchmark corpus and `tools/bench` are required before engine choice.
+- The CPU budget must also hold on a low-end reference device (NFR-16, ADR-0009). If the chosen engine cannot meet it there, a lighter model tier or a stage-2 prefilter becomes necessary, even if the budget is met on a flagship phone.
 - Keyword text to engine tokens (P26) and model licences (P27) must be resolved before any model is bundled.
 - We will know this was wrong if the duty cycle in real use is much higher than on the corpus (for example constant TV or crowd noise), which would mean adding stage 2 or adaptive gating.

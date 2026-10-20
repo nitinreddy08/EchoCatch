@@ -10,7 +10,7 @@ Project phase: **planning** (no product code yet). Date of this index: 2026-10-2
 | [01-requirements](plan/01-requirements.md) | Functional requirements, performance budgets, constraints |
 | [02-platform-facts](plan/02-platform-facts.md) | Android and library facts, with how well each is verified |
 | [03-architecture](plan/03-architecture.md) | Modules, pipeline, state machine, threading, alert path |
-| [04-spikes](plan/04-spikes.md) | The six M0 experiments that settle open decisions |
+| [04-spikes](plan/04-spikes.md) | The M0 experiments (S1–S6) plus the ongoing compatibility survey (S7) |
 | [05-roadmap](plan/05-roadmap.md) | Milestones M0–M6 and task-level work breakdown |
 | [06-quality-and-testing](plan/06-quality-and-testing.md) | Test layers, benchmark, battery protocol, release gates, Definition of Done |
 | [07-risks](plan/07-risks.md) | Risk register |
@@ -29,6 +29,7 @@ Project phase: **planning** (no product code yet). Date of this index: 2026-10-2
 | [0006](adr/0006-native-core-and-kotlin-shell.md) | Native C++ core under a thin Kotlin shell | Accepted |
 | [0007](adr/0007-no-network-permission.md) | No `INTERNET` permission, CI-enforced permission list | Accepted |
 | [0008](adr/0008-prerecorded-alert-cue.md) | Pre-recorded alert cue, not text-to-speech | Accepted |
+| [0009](adr/0009-broad-device-compatibility.md) | Broad device compatibility: universal baseline, capability tiers, per-headset profiles, minSdk 26 | Accepted |
 
 New ADRs start from [0000-template](adr/0000-template.md).
 

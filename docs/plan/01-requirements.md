@@ -18,6 +18,7 @@ Numbers marked **⚠** are placeholders until the M0 spikes produce baselines (A
 | FR-8 | Onboarding explains each permission, the persistent notification, and the per-OEM battery-optimization steps. |
 | FR-9 | The notification and the status screen always show the true state: Disarmed, Armed-idle, Listening, Alerting. |
 | FR-10 | Local diagnostics: counters only (detections, alerts, source in use). No audio is recorded or exported in v1. |
+| FR-11 | A "Test my headset" wizard (about 30 s) opens the headset mic route and records which device type, sample rate, and codec result, and whether music keeps playing. It saves a per-headset profile locally (preferred source) and recommends a source. It can export a device report (JSON the user shares manually, with no audio) for the compatibility matrix. The phone mic is always the fallback. |
 
 ## Non-functional requirements and budgets
 
@@ -46,10 +47,27 @@ Definitions (all measured by tools in `06-quality-and-testing.md`):
 | NFR-12 | Resident memory, Listening | < 100 MB | ⚠ |
 | NFR-13 | APK size | < 30 MB incl. models | ⚠ |
 | NFR-14 | Alert reliability after 24 h soak (service alive, alert fires) | 100 % of soak runs | ⚠ |
+| NFR-15 | Phone-mic mode works on every tested API level from 26 up | 100 % of the emulator and device matrix | ⚠ |
+| NFR-16 | CPU time per audio-second on a low-end reference device | within NFR-8, scaled for that device; set after S4 | TBD |
+| NFR-17 | Headset-mic route on any tested non-Apple earbuds either works or falls back cleanly to the phone mic | 0 unrecovered failures; every fallback logged | ⚠ |
 
 ## Constraints
 
 - 100 % free and open source. All dependencies and model files must be under permissive or otherwise redistributable licences, recorded in `docs/third-party.md` (created in M0).
 - Offline: no `INTERNET` permission, ever (ADR-0007).
 - Permission budget (each needs written justification): `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS` (API 33+). Possible, pending spikes: `MODIFY_AUDIO_SETTINGS`, `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`. Avoided unless a spike proves they are needed: `BLUETOOTH_CONNECT`, `READ_PHONE_STATE`.
-- minSdk and targetSdk: see `09-open-decisions.md`.
+- Compatibility goals below (ADR-0009). minSdk is 26; targetSdk is the current stable level, bumped yearly.
+
+## Compatibility requirements (ADR-0009)
+
+| ID | Requirement |
+|---|---|
+| CR-1 | Support Android 8.0 (API 26) and newer. |
+| CR-2 | **Universal baseline (Tier 0):** phone-mic capture with the alert played through the active output works on every supported API level, with any earbuds, whether or not their mic is usable. |
+| CR-3 | Any Bluetooth audio device can receive the alert, because that needs only ordinary audio output. The headset-mic path is an optional, capability-detected upgrade with automatic fallback to Tier 0. |
+| CR-4 | Non-Apple TWS earbuds are the target. Apple earbuds are out of scope for testing and support. There is no Apple-specific code, and they may work as generic Bluetooth devices. |
+| CR-5 | Entry-level phones are supported: the CPU and memory budgets are checked on a low-end reference device (NFR-16). |
+| CR-6 | No dependency on Google Play Services, so the app runs on devices without them. |
+| CR-7 | Differences between devices are handled by runtime capability detection and per-headset profiles. Code never branches on phone or earbud model names. |
+| CR-8 | ABIs: `arm64-v8a` and `armeabi-v7a`, plus `x86_64` for emulators. |
+| CR-9 | A public compatibility matrix lists tested devices, devices expected to work by capability, and known issues. Be honest about what is tested versus inferred. |

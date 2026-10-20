@@ -44,6 +44,24 @@ The S6 protocol is the single method used from M0 onward (see `04-spikes.md`). R
 - **No proprietary blobs:** no Google Play Services, Firebase, or closed-source SDKs (this also keeps F-Droid acceptance possible).
 - Reproducible build check for release builds (M6-T1).
 
+## Compatibility testing (ADR-0009)
+
+We cannot own every phone and earbud, so compatibility is tested in layers and reported honestly.
+
+| Layer | Covers | Limit |
+|---|---|---|
+| Robolectric at several SDK levels | API-level adapters and tier selection logic | Not real audio or Bluetooth |
+| Emulator matrix (API 26 up to current) in CI | Service start/stop, permissions, notification flow, crash-free startup | No Bluetooth, no real players |
+| Owner's devices (`HW`) | Real audio, ducking, battery, OEM behaviour | One or a few devices |
+| Low-end reference device (`HW`) | CPU and memory budgets (NFR-16) | One device class |
+| Volunteer device reports (S7, from M6) | Wide spread of phones and earbuds | Self-reported, so labelled as such |
+
+Rules:
+- The Tier 0 baseline (phone mic plus alert out of the active output) is tested on **every** level in the matrix.
+- For headset tiers, the test is that the route either works or falls back cleanly (NFR-17), not that quality is identical.
+- Entries in the public compatibility matrix are labelled *tested* or *reported by a user*, with date and app version.
+- A compatibility bug that needs special handling becomes a profile or a vendor-quirks data entry, not a branch on a model name.
+
 ## Release gates (v1.0 needs all of these)
 
 1. All NFR budgets met, or revised by an accepted ADR with the reason.
@@ -53,6 +71,7 @@ The S6 protocol is the single method used from M0 onward (see `04-spikes.md`). R
 5. Permission and licence guards green.
 6. S1–S6 results are committed and the ADRs are consistent with them.
 7. README states the no-guarantee disclaimer and the privacy statement.
+8. Compatibility: Tier 0 passes on every API level in the matrix (NFR-15); the headset route works or falls back cleanly on every earbuds model tested (NFR-17); the CPU budget holds on the low-end reference device (NFR-16); the compatibility matrix exists and states what is tested.
 
 ## Definition of Done (per task)
 

@@ -8,6 +8,10 @@ EchoCatch is a free, open-source Android app. While the user listens to music or
 
 It must be fast, seamless, and use as little battery as physics allows. Everything runs on the device, offline.
 
+## Reach
+
+EchoCatch should work on most Android phones and versions (Android 8.0 and newer) with any non-Apple TWS earbuds. The promise is precise (ADR-0009): a universal baseline that always works, plus detected upgrades for earbuds whose mic and Bluetooth stack allow it. Compatibility is published honestly, with tested and user-reported results kept separate.
+
 ## Non-goals (v1)
 
 - Not a safety-certified device. The app never claims to guarantee an alert (README and onboarding must say so).

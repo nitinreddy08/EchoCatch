@@ -22,6 +22,8 @@ Read `docs/plan/08-ai-agent-workflow.md` before starting any task. Work is organ
 
 Kotlin shell (Compose UI, a foreground service, policy and alert control) around a **native C++17 pipeline with no Android dependencies** (`native/pipeline`) so that accuracy, latency, and CPU benchmarks run on a normal Linux host. Pipeline: audio source → ring buffer → VAD → keyword verifier → decision → alert via Android audio focus. Full detail and the planned module layout: `docs/plan/03-architecture.md`.
 
+Target reach: Android 8.0 (API 26) and newer, any non-Apple TWS earbuds (ADR-0009). The phone mic with the alert played through the active output is the universal baseline; headset-mic routes are capability-detected upgrades that fall back to it.
+
 Three things need more than one file to understand:
 
 - The microphone is a **pluggable source** (phone mic, Bluetooth classic, LE Audio, wired). The default is decided by a hardware spike, not assumed (ADR-0002).
@@ -32,6 +34,7 @@ Three things need more than one file to understand:
 
 - Never add the `INTERNET` permission or any networking, analytics, or crash-reporting library (ADR-0007). CI will check the permission list once M0-T5 lands.
 - Never add a dependency, model file, dataset, or permission without a licence-checked entry in `docs/third-party.md` and the justification the plan requires. Exclude non-commercial licences (for example openWakeWord's pretrained models).
+- Feature-detect; never branch on phone or earbud model names. Put API-level differences behind adapters, not scattered `SDK_INT` checks. No Google Play Services dependency. The phone-mic baseline must keep working on every supported API level (ADR-0009).
 - Decide by measurement (ADR-0001). Numbers marked ⚠ in `docs/plan/01-requirements.md` are placeholders until the M0 spikes finish. Do not present them as measured.
 - Keep the audio thread allocation-free and lock-free in the steady state. Never persist or log raw audio.
 - The cloud sandbox has no phone or Bluetooth. Say clearly what was verified and what was only inferred. Hardware results come from the user via the protocol in `docs/plan/08-ai-agent-workflow.md`.

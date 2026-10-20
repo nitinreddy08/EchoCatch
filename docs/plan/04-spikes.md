@@ -17,7 +17,7 @@ S4 detector bench ─────► ADR-0003 (can start now in the sandbox, no 
 S5 coexistence ────────► ADR-0004 / M5
 ```
 
-S4 accuracy work needs no hardware and can start immediately.
+S4 accuracy work needs no hardware and can start immediately. S7 (compatibility survey) is ongoing: it reuses the S1 protocol and continues after M0 through the beta.
 
 ---
 
@@ -32,6 +32,8 @@ S4 accuracy work needs no hardware and can start immediately.
 - H1.4 The phone mic in a pocket or bag has too little usable speech SNR to be the default.
 
 **Matrix:** source ∈ {phone mic, BT classic SCO, LE Audio (if available), wired (if available)} × capture preset ∈ {`VOICE_RECOGNITION`, `UNPROCESSED`, `MIC`} × media ∈ {music, podcast}.
+
+**Broad compatibility (ADR-0009):** the goal is any non-Apple TWS, so S1 is designed as a **short protocol anyone can run** (about 10 minutes per earbuds) with the spike app. It writes a stable JSON report (no audio) that volunteers can paste into a GitHub issue. The owner's earbuds are the first data point, and every additional model adds a row to the compatibility matrix (S7). S1's decision rule uses the whole set of reports, not one pair of earbuds.
 
 **Measure per cell (each 30 min ⚠):**
 - route actually in use (`dumpsys audio` / `AudioRecord.getRoutedDevice()`), codec, sample rate
@@ -112,7 +114,7 @@ S4 accuracy work needs no hardware and can start immediately.
 
 **Question:** What happens when a phone call, voice assistant, voice message, or screen recorder wants the mic?
 
-**Method:** run Listening, then trigger each scenario. Observe whether capture is silenced (P21), whether we are notified, whether we recover on our own, and whether we break the other app.
+**Method:** run Listening, then trigger each scenario. Observe whether capture is silenced (P21 is verified in the docs; this spike confirms it on real devices), whether `AudioRecordingCallback` / `isClientSilenced()` reports it (P21a), whether we recover on our own, and whether we break the other app. Include an app with a visible UI that records audio, and a voice assistant.
 
 **Output:** `S5-coexistence.md`, feeding ADR-0004 and M5-T3. The rule is that we must never prevent a call from working.
 
@@ -136,6 +138,16 @@ S4 accuracy work needs no hardware and can start immediately.
 **Instruments:** `adb shell dumpsys batterystats` and Battery Historian, Perfetto traces, Android Studio Energy Profiler where available, and plain battery-percent deltas over long runs (≥ 2 h) as a sanity check. Record the method's noise floor so budgets are not set below what we can measure.
 
 **Output:** `S6-power-baseline.md`, with numeric NFR-9, NFR-10, and NFR-7 values added to ADR-0001.
+
+---
+
+## S7 — Device and earbuds compatibility survey (ongoing)
+
+**Question:** Across many phones, Android versions, and non-Apple earbuds, which tier works, and where are the problems?
+
+**Method:** reuse the S1 protocol and the "Test my headset" wizard (FR-11) as the data collector. Sources of reports: the owner's devices, volunteers via GitHub issue template (M6-T4), and any emulator or loaner devices available. S2 (service lifecycle) and S5 (coexistence) are also repeated on additional Android versions where possible.
+
+**Output:** `docs/compat/` matrix (from M6), with columns for phone, Android version, earbuds, chipset/codec if known, tier that works, music-quality note, and issues. Report entries are tagged *tested* or *reported by a user*. A pattern that cannot be handled by a profile (for example one vendor's firmware) becomes a vendor-quirks data file, never code branches on model names.
 
 ---
 

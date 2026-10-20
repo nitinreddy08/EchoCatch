@@ -47,7 +47,8 @@ Every design decision that rests on an Android or library behaviour is listed he
 |---|---|---|---|
 | P19 | Oboe `PerformanceMode::PowerSaving` "uses larger internal buffers and a data path that trades off latency for lower power". The default input preset is `VoiceRecognition`. `setDeviceId` is honoured on AAudio (API 28+) but not OpenSL ES. | VERIFIED | https://github.com/google/oboe/blob/main/docs/FullGuide.md |
 | P20 | Whether power-saving input streams actually reduce power for *capture* on real devices. The Oboe guide gives no input-specific power data. | **UNVERIFIED — spike S6** | none |
-| P21 | Another app capturing audio can silence our capture on Android 10+ (concurrent-capture rules), e.g. during a call. | PRIOR — spike S5 | — |
+| P21 | On Android 10+, two ordinary apps can never capture audio at the same time. An app with a visible UI wins over a background app, privacy-sensitive sources (`CAMCORDER`, `VOICE_COMMUNICATION`) win over others, and the later starter wins among equals. An active call (`MODE_IN_CALL` / `MODE_IN_COMMUNICATION`) always receives audio. Our background capture will therefore be silenced in those cases. | VERIFIED | https://developer.android.com/media/platform/sharing-audio-input |
+| P21a | We can detect silencing with `AudioManager.AudioRecordingCallback` (register before capture starts) and `AudioRecordingConfiguration.isClientSilenced()`. Android 11 added `setPrivacySensitive(true)`; we must **not** set it, so that the system assistant is not blocked. | VERIFIED | same |
 | P22 | Third-party apps cannot use the phone's always-on hotword DSP (SoundTrigger); it is reserved for the system assistant. The `VoiceInteractionService` exemption in P3 applies only to the default assistant. | PRIOR | — |
 
 ## Libraries and models
@@ -62,6 +63,17 @@ Every design decision that rests on an Android or library behaviour is listed he
 | P28 | openWakeWord's official pretrained models are CC BY-NC-SA 4.0 (non-commercial). **Excluded** by the "no commercial licensing restrictions" constraint. The openWakeWord *code* is reported as Apache-2.0 (third-party listing), so training our own models remains possible. | VERIFIED (model licence) | https://huggingface.co/davidscripka/openwakeword/raw/main/README.md |
 | P29 | microWakeWord is a training framework for tiny streaming wake-word models, using synthetic speech. Its licence was not confirmed. | UNVERIFIED | https://esphome.io/components/micro_wake_word.html |
 | P30 | Picovoice Porcupine needs an access key checked online, and Snowboy is discontinued. Both are excluded. | PRIOR | — |
+
+## API-level behaviour map (compatibility, ADR-0009)
+
+| # | Fact | Tag | Source |
+|---|---|---|---|
+| P31 | API 26 (Android 8.0): `AudioFocusRequest` and automatic ducking exist. | VERIFIED | audio-focus docs (P7) |
+| P32 | API 26–29: foreground services need no `microphone` type attribute; the type attribute and while-in-use mic limits arrive with Android 10/11, and Android 11 added background-start limits for mic access. The exact boundaries per level are not confirmed. | PRIOR — spike S2 on several API levels | — |
+| P33 | API 29 (Android 10): concurrent-capture rules begin (P21). Before that, capture was limited to the foreground app or a foreground service. | VERIFIED | https://developer.android.com/media/platform/sharing-audio-input |
+| P34 | API 31 (Android 12): foreground services cannot be started from the background without an exemption; `setCommunicationDevice` appears. API 34 (Android 14): every foreground service must declare a type and the matching permission. | VERIFIED (31 background start, 34 type declaration); `setCommunicationDevice` level PRIOR | service-types and restrictions-bg-start pages (P1, P2) |
+| P35 | OEM background-process killing varies widely by vendor (Xiaomi, Huawei, Oppo, Vivo, Samsung, OnePlus and others are known for it). The vendor-specific user steps change often. | PRIOR (dontkillmyapp.com could not be reached from the planning sandbox) | — |
+| P36 | HFP can be wideband (mSBC, 16 kHz) or narrowband (CVSD, 8 kHz) depending on the phone and earbuds, and some earbuds expose only one mic or switch mic roles. LE Audio availability depends on Android version, phone, and headset. | PRIOR — spikes S1 and S7 | — |
 
 ## Test players (all open source, so the spikes are reproducible)
 
