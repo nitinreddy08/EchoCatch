@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-Milestone M0 (foundations and spikes) is in progress. Build skeletons, CI and the experiment app exist; the product itself (detection pipeline, alert, real UI) does not yet. Status per task is in `docs/plan/05-roadmap.md`.
+Milestone M0 (foundations and spikes) is waiting on hardware results, and milestone M1 (walking skeleton) has a first app: in-app setup (disclosure, microphone and notification permission, name), a microphone foreground service and a status screen with a level meter. The detection pipeline and the alert do not exist yet, so the app does not detect names, and its screens say so. Status per task is in `docs/plan/05-roadmap.md`.
 
 EchoCatch is a free, open-source, fully offline Android app. While the user listens to music on Bluetooth earphones, it listens to the environment and, when someone calls the user's name, ducks or pauses the media and plays an alert.
 
@@ -20,6 +20,7 @@ python3 -I -m unittest discover -s tools/ci/tests                              #
 python3 -I -m unittest discover -s tools/ci/tests -k permissions               # one script's tests
 python3 -I tools/ci/check_third_party.py [--render]                            # validate / regenerate docs/third-party.md
 python3 -I tools/ci/check_permissions.py --profile app|spikes --manifest|--apk <file>
+python3 -I tools/ci/check_sdk_checks.py app/src                                # SDK_INT only inside the platform/ adapter
 ```
 
 Pure Kotlin modules (`core:model`, `core:policy`), Gradle 9.6 wrapper, no Android SDK needed:
@@ -37,6 +38,7 @@ Android modules (`:app`, `:spikes`) need an Android SDK. `settings.gradle.kts` i
 
 Environment notes (cloud sandbox):
 - The sandbox has no Android SDK and cannot reach `dl.google.com`, so Android modules are verified by GitHub Actions (`.github/workflows/ci.yml`). Read results with the GitHub `actions_list` and `get_job_logs` tools; request `tail_lines` of 300 or more to reach the Gradle error above the post-job output.
+- Google Maven (`dl.google.com`, which serves AndroidX) is unreachable from the sandbox, so AndroidX versions and their `minCompileSdk` cannot be looked up here. Add a throwaway workflow that prints `maven-metadata.xml` and the `aar-metadata.properties` inside the AAR, push it, read its log, then delete it (this is how the Compose line was chosen; see commit b1c922a and the comment in `gradle/libs.versions.toml`). Compose 1.12 and `lifecycle-runtime-compose` 2.11 need compileSdk 37; the project is on 36.
 - Maven Central intermittently answers HTTP 429 through the sandbox proxy. Gradle caches what it downloads, so re-run the build (a loop of a few attempts works) before suspecting the build files.
 - Do not declare `org.jetbrains.kotlin.jvm` (or any Kotlin plugin) with `apply false` in the root build. It loads Kotlin in a parent classloader and AGP 9 then fails with `NoClassDefFoundError: BaseVariant`. Each module applies the plugins it needs.
 

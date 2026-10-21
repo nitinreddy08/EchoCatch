@@ -43,6 +43,8 @@ Status: Draft v0.1 · 2026-10-20 · decisions live in `docs/adr/`; this file des
 
 Module dependency rule: `app` → `service` → (`core/*`); `core/policy` and `core/model` depend on nothing Android; no `core/*` module depends on `service` or `app`.
 
+**State of the module split (M1).** The Android code that will become `core/audio` and `service` currently lives in `:app`, in packages that follow the boundaries above (`audio`, `service`, `status`, `settings`, `platform`, `ui`). Splitting them into Gradle modules waits until a second consumer exists (the JNI binding in M2, the alert path in M3); until then a split would only add build cost. The pure Kotlin modules are already separate: `core/model` also holds `NameSettings` and `LevelMeter`, and `core/policy` also holds `PermissionStatus`, `SetupPlanner` and `ListeningStatus`, all unit-tested on the host.
+
 ## 3. Defaults chosen (challenge any of these with an ADR)
 
 | Concern | Default |
@@ -114,19 +116,25 @@ This module is pure Kotlin so it can be exhaustively table-tested without a devi
 ```kotlin
 interface AudioSource {
     val id: SourceId                       // PHONE_MIC, BLUETOOTH_CLASSIC, BLE_AUDIO, WIRED
-    val capabilities: SourceCapabilities   // native rate, expected quality, known side effects
-    suspend fun open(): OpenResult         // establishes the route
-    fun startCapture(sink: PcmSink)
+    fun open(): OpenResult                 // establishes the route; blocking, control thread only
+    fun startCapture(sink: PcmSink)        // starts the dedicated capture thread
     fun stopCapture()
-    suspend fun close()                    // MUST release the route promptly (restores music quality)
+    fun close()                            // MUST release the route promptly (restores music quality)
+}
+
+interface PcmSink {
+    fun onFrame(samples: ShortArray, count: Int)   // audio thread: no allocation, no locks, buffer reused
+    fun onSourceError(error: SourceError)
 }
 ```
+
+As built in M1, `open` and `close` are plain blocking calls rather than `suspend` functions: the control plane is one dedicated thread, so nothing is gained by suspending, and a service can release the source from `onDestroy` without a coroutine. `SourceCapabilities` is added with the first headset source (M4). The phone-mic source uses the `MIC` audio source at 16 kHz in 100 ms hops; whether `VOICE_RECOGNITION` is better is an M2 measurement.
 
 `RouteMonitor` watches `AudioDeviceCallback` and emits the set of available inputs. A `SourceSelector` picks one based on the user's preference, the stored `HeadsetProfile` for the connected headset (see §11), what S1 proved about quality and battery, and what is available. All of that is policy data, not code branches buried in `AudioRecord` calls.
 
 ## 9. Permissions and manifest (ADR-0007)
 
-Declared: `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS`. A CI check dumps the built APK's permissions and **fails if `INTERNET` or any permission outside the approved list appears**. Adding a permission requires editing the list in the same PR and writing its justification in `docs/plan/01-requirements.md`.
+Declared: `RECORD_AUDIO`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE`, `POST_NOTIFICATIONS`. The two that Android asks about (microphone, and notifications on Android 13+) are requested inside the app, one question at a time, after a plain-language disclosure; `SetupPlanner` decides the next step from live facts, so a permission switched off later brings its question back. A permission Android will no longer ask about is sent to the app settings page, which is the only part of setup that happens outside the app (as are Bluetooth pairing and any battery-manager steps). A CI check dumps the built APK's permissions and **fails if `INTERNET` or any permission outside the approved list appears**. Adding a permission requires editing the list in the same PR and writing its justification in `docs/plan/01-requirements.md`.
 
 ## 10. Failure behaviour
 
