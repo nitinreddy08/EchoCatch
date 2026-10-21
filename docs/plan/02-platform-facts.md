@@ -75,6 +75,21 @@ Every design decision that rests on an Android or library behaviour is listed he
 | P35 | OEM background-process killing varies widely by vendor (Xiaomi, Huawei, Oppo, Vivo, Samsung, OnePlus and others are known for it). The vendor-specific user steps change often. | PRIOR (dontkillmyapp.com could not be reached from the planning sandbox) | — |
 | P36 | HFP can be wideband (mSBC, 16 kHz) or narrowband (CVSD, 8 kHz) depending on the phone and earbuds, and some earbuds expose only one mic or switch mic roles. LE Audio availability depends on Android version, phone, and headset. | PRIOR — spikes S1 and S7 | — |
 
+## Verified on a real device (OnePlus 11R, Android 16, OnePlus Buds 4; first run 2026-10-21)
+
+Evidence: [first-run results](../spikes/results/2026-10-21-first-run-oneplus-11r-buds-4.md). One phone and one pair of earbuds only.
+
+| # | Fact | Tag |
+|---|---|---|
+| P41 | The Bluetooth call link (SCO) input exposed by this phone is mono, 16-bit, 8 and 16 kHz only. This confirms P13 and P36 for this pair. | VERIFIED on device |
+| P42 | `AudioRecord.setPreferredDevice(call-link input)` is accepted and `getRoutedDevice()` reports the call link, but all samples are zero while the audio mode stays NORMAL and no communication device is set. **A reported route is not proof of audio; check the signal.** Whether the call-route method (`setCommunicationDevice` with call mode) delivers real audio is untested. | VERIFIED on device (silence); route method UNTESTED |
+| P43 | With that silent route, `isMusicActive` stayed true before, during and after; the effect of opening a real call link on music is still unknown. | VERIFIED (silent route only) |
+| P44 | `getActivePlaybackConfigurations()` shows other apps' players with usage and content type (here usage 1, content type 0) and shows our own alert player (usage 12, content type 1). | VERIFIED on device (resolves P12) |
+| P45 | Audio focus `GAIN_TRANSIENT_MAY_DUCK` with navigation-guidance and speech attributes was granted in 5 to 7 ms and, for one media player of unknown content type, the tester heard ducking in one run and a hard-to-hear alert in the other. | VERIFIED once; not enough to decide |
+| P46 | No LE Audio device was listed for this pair, so LE Audio is not in use with the OnePlus 11R and Buds 4 as connected. | VERIFIED on device |
+| P47 | The call link reports the phone's name as its product name, not the earbuds'. Product names cannot identify a headset. | VERIFIED on device |
+| P48 | Opening the phone microphone with `AudioRecord` at 16 kHz returns data in about 0.2 s while music plays through the earbuds. | VERIFIED on device |
+
 ## Distribution (ADR-0011)
 
 | # | Fact | Tag | Source |

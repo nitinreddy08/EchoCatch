@@ -16,7 +16,7 @@ Each task is sized for one pull request (roughly ≤ 400 changed lines) so an AI
 | M0-T6 spike shell app and JSON report | done (`:spikes`, "EchoCatch Lab") |
 | M0-T7a S1 route test, T7c S3 ducking test, T7b S2 service lifecycle (with S5 coexistence logging) and T7f S6 battery sampling | done, awaiting hardware runs. S6 covers runs R0 to R2 only; R3 and R4 need the native pipeline (M2), and R5 (Oboe versus `AudioRecord`) needs native code (M1) |
 | M0-T7d S4 detector benchmark | not started. It is host-side work belonging to M2 (corpus tooling and the bench CLI) and does not need a phone |
-| M0-T8 hardware runs | waiting for the owner: `docs/spikes/runbook-oneplus-11r-buds-4.md` |
+| M0-T8 hardware runs | first run done 2026-10-21, partial ([results](../spikes/results/2026-10-21-first-run-oneplus-11r-buds-4.md)). Phone microphone and one ducking combination work; the earbuds' microphone returned silence with the method tried, and the call-route method, most ducking combinations, and the service test (cut off) remain. Lab app v2 with guided tests is built; next run follows `docs/spikes/runbook-oneplus-11r-buds-4.md` |
 | M0-T9 ratify ADRs | blocked on M0-T8 and S4 |
 
 ## Milestone map

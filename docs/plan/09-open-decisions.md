@@ -34,7 +34,7 @@ Items the project cannot resolve without the user (or hardware). Each says what 
 |---|---|---|
 | Plan first, then code | Agreed 2026-10-20 | this plan |
 | D1 Licence: GPL-3.0-only | Chosen by the owner 2026-10-20 | ADR-0010, `LICENSE` |
-| D2 (part) Primary test devices: **OnePlus 11R** phone and **OnePlus Buds 4** earbuds | Provided by the owner 2026-10-20. The phone's Android version and the earbuds' codec / LE Audio support are not yet known; S1 will record them from the device. | `04-spikes.md` |
+| D2 (part) Primary test devices: **OnePlus 11R** phone and **OnePlus Buds 4** earbuds | Provided by the owner 2026-10-20. The first run recorded: Android 16 (API 36); no LE Audio device listed for this pair; a high-resolution A2DP output is present (codec not confirmed). | `04-spikes.md`, first-run results |
 | D3 Test names | Claude chose a varied set for the benchmark (owner delegated) | `04-spikes.md` S4 |
 | D7 Distribution: F-Droid and GitHub first, Google Play later | Chosen by the owner 2026-10-20 | ADR-0011 |
 | D5 targetSdk 36 (compileSdk 36) | Set in M0-T2: Google Play requires target API 36 or higher from 2026-08-31 (official Play page, fetched 2026-10-20). Move to API 37 only after checking its behaviour changes. | `app/build.gradle.kts` |

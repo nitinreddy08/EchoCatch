@@ -10,6 +10,8 @@ Who does what: an AI agent writes the spike app and the analysis scripts. The us
 
 The experiment app "EchoCatch Lab" (`spikes/`) implements S1, S2, S3, S5 and the R0 to R2 parts of S6, and shares a JSON report with no audio. The owner's step-by-step instructions are in [runbook-oneplus-11r-buds-4](../spikes/runbook-oneplus-11r-buds-4.md). Not covered by the app: S4 (host-side benchmark, built in M2), S6 runs R3 to R5 (need the native pipeline and Oboe), and S7 (the same app is reused by volunteers later).
 
+First results (2026-10-21): [first-run results](../spikes/results/2026-10-21-first-run-oneplus-11r-buds-4.md). Lab app v2 adds guided S1 and S3 flows, because the first run showed that manual tests are easy to run incompletely.
+
 ## Primary test devices
 
 The owner's devices are the first data point for every hardware spike:

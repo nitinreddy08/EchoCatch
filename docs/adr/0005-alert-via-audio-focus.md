@@ -3,7 +3,7 @@
 - **Status:** Proposed (the focus type and attributes are decided by S3)
 - **Date:** 2026-10-20
 - **Deciders:** pending
-- **Evidence:** platform facts P7–P12; S3 pending
+- **Evidence:** platform facts P7–P12; S3 partly run on the OnePlus 11R (P44, P45): one combination, one media player, ducking heard once and a hard-to-hear alert once; the rest of the matrix and speech players are pending
 
 ## Context
 

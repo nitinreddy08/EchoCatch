@@ -3,7 +3,7 @@
 - **Status:** Accepted (the default source is decided by spike S1)
 - **Date:** 2026-10-20
 - **Deciders:** project owner, with Claude as architect
-- **Evidence:** platform facts P13–P18 (`docs/plan/02-platform-facts.md`); S1 pending
+- **Evidence:** platform facts P13–P18 (`docs/plan/02-platform-facts.md`); S1 partly run on the OnePlus 11R and Buds 4 (P41–P43, P46–P48): a preferred-device route to the call link reported success but delivered silence, so the source layer must verify the signal; the call-route method is still untested
 
 ## Context
 

@@ -6,6 +6,12 @@ You do not need any technical knowledge. The test app is called **EchoCatch Lab*
 
 Plan for about 45 minutes of active time (Parts 1 and 2), plus a few "leave the phone alone" waits (Part 3) and one optional long test (Part 4). You can do the parts on different days.
 
+## What changed since the first run (version 2)
+
+Your first report was very helpful and showed what to fix. The new build has **guided tests**: the app tells you when to start, then asks how the music sounded right after each test, so you cannot attach an answer to the wrong test. Reports are now compact so they fit in one chat message, and the app uses one fixed signing key, so future builds install over the old one.
+
+**One-time step:** the version you have now was signed with a different key. Before installing version 2, tap **Share events only** in the old app if you want to keep its service events, then **uninstall EchoCatch Lab**, then install the new one. After this, updates install over the top.
+
 ## Part 0. Install the app (5 minutes)
 
 1. On a computer or on the phone, open your repository on GitHub, then **Actions**, then the newest run on the branch `claude/init-54nd5l` with a green tick.
@@ -17,38 +23,32 @@ Plan for about 45 minutes of active time (Parts 1 and 2), plus a few "leave the 
 
 Write down: the phone's Android version (Settings, About device).
 
-## Part 1. S1: earbuds microphone and your music (15 minutes)
+## Part 1. S1: earbuds microphone and your music (about 5 minutes)
 
-Goal: find out what happens to music when the app uses the earbuds' microphone, and which route works.
+Goal: find out whether the earbuds' microphone works, and what it does to your music.
 
-Do this with the Buds 4 in your ears.
+1. Put the Buds 4 in your ears and connect them. Start music in another app (for example Spotify) and keep it playing.
+2. In EchoCatch Lab tap **Scan devices**. The log should say "Earbuds microphone is listed."
+3. Tap **Start the earbuds microphone test**. It runs four tests of 10 seconds each. Before each one a box tells you what is being tested. Tap **Start**, **keep talking** (read something aloud) and **listen to your music** while it records.
+4. After each test a box asks how the music sounded. Choose the closest answer. If you are not sure, choose **Not sure**.
+5. When it finishes, tap **Share report** at the bottom and paste it here.
 
-1. Start music in another app (for example Spotify). Keep it playing.
-2. In EchoCatch Lab, choose **Method = PREFERRED_DEVICE**, **Capture preset = VOICE_RECOGNITION**, **Seconds = 10**, **Sample rate = 16000**.
-3. Tap each **Test mic** button in the list (phone microphone first, then any Bluetooth ones). While it records, **listen to your music** and say a few words normally.
-4. When the app says "S1 done", tap how the music sounded: **good**, **phone-call quality**, or **stopped or paused**.
-5. Repeat with **Method = COMMUNICATION_DEVICE**.
-6. Optional extras if you have time: repeat step 2 to 4 with **Capture preset = UNPROCESSED** and with **Sample rate = 32000**.
-7. Make sure you try at least once with the **podcast** in place of music.
+Do it once with music and, if you have time, once more with a podcast playing.
 
-Tip: if no Bluetooth microphone appears in the list, tell me. That is a useful result too.
+Why this matters: the first run only tried one way of opening the earbuds' microphone, and it returned silence. The new test also tries the way that opens the Bluetooth call link, which may change your music's sound. That is exactly what we need to see.
 
-## Part 2. S3: lowering your music for the alert (15 minutes)
+## Part 2. S3: lowering your music for the alert (about 5 minutes per player)
 
 Goal: find out which way of asking works best for your players.
 
-1. Start a player (Spotify, YouTube, YouTube Music, a podcast app, or any other you use). Type its name in the **Player under test** box.
-2. Choose **Focus type = GAIN_TRANSIENT_MAY_DUCK**, **Usage = ASSISTANCE_NAVIGATION_GUIDANCE**, **Content type = SPEECH**. Tap **Play alert now** and listen to what the music does.
-3. Tap what you heard: **ducked**, **paused**, **ignored**, **did not resume**, or **alert hard to hear**. You can tap more than one.
-4. Repeat for these combinations (one tap on each spinner, then Play alert):
-   - GAIN_TRANSIENT_MAY_DUCK with NOTIFICATION and SONIFICATION
-   - GAIN_TRANSIENT with ASSISTANCE_NAVIGATION_GUIDANCE and SPEECH
-   - GAIN_TRANSIENT with ALARM and SONIFICATION
-5. Do the whole thing again with a **podcast or audiobook** instead of music. Speech apps often behave differently.
-6. Tap **Show active players** while something is playing, once for each player. This shows how the other app labels its sound.
-7. Tap **Volume-duck fallback test** once. Note whether the music got quieter and came back.
+1. Start a player (Spotify, YouTube, YouTube Music, a podcast app, or any other you use) and keep it playing.
+2. In the lab app, type the **name of that app** in the box under step 3 (for example "Spotify"). It must be the app's name, not a person's name.
+3. Tap **Start the alert test**. It plays four alerts. Before each one a box tells you what is being tested. Tap **Play alert** and **listen to what your music does**.
+4. After each alert a box asks what happened. Tick everything that applies (for example "ducked" and "alert was hard to hear"), then tap **Done**.
+5. Repeat with a **podcast or audiobook** app. Speech apps often behave differently, and they matter most.
+6. Optional: under "Advanced", tap **Show active players** while something is playing, and tap **Volume-duck fallback test** once. Note whether the music got quieter and came back.
 
-If you have several players, test your two most-used ones in full and the rest with only the first combination.
+If you have several players, test your two most-used ones in full and the rest once each.
 
 ## Part 3. S2 and S5: does the background service survive? (about 1 hour, mostly waiting)
 
@@ -57,7 +57,7 @@ Goal: find out how reliably a listening service can run on your OnePlus, and how
 1. Set **Mode = cycle** and **Cycle every = 60**. Tap **Start service**. A notification "EchoCatch Lab running" appears.
 2. Press **Home** and use the phone normally for 10 minutes. Then lock the screen and leave it for **30 minutes**.
 3. Unlock and open EchoCatch Lab. Tap **Show last events**. Each line `mic_cycle` shows that the microphone opened in the background. Do not worry about reading the details.
-4. Start music, put the Buds 4 in, and leave the service running for 10 more minutes. Take one earbud out and put it back. Then tap **Share report**.
+4. Start music, put the Buds 4 in, and leave the service running for 10 more minutes. Take one earbud out and put it back. Then tap **Share events only** and paste it here. (If the message is still too long, tap **Show last events** and send a screenshot of the log instead.)
 
 Start paths to test (each one is a separate test):
 
