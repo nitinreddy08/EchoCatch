@@ -59,6 +59,8 @@ Combination: focus `GAIN_TRANSIENT_MAY_DUCK`, usage `ASSISTANCE_NAVIGATION_GUIDA
 4. **The music volume index did not change** (81 throughout), which suggests the system ducked the player, not the music stream. This is an inference.
 5. **The player was the Brave browser playing YouTube in the background** (reported by the tester afterwards, because the app's field did not record it). A browser tab is a different player from the YouTube app. Podcast or speech apps, other music apps, other focus types and other alert attributes were not tested. S3 remains open.
 
+**Follow-up from the tester (spoken, no report attached, not verified):** other players they tried behaved similarly to the Brave and YouTube case. Which players, which alert settings and which behaviour were not recorded, so this is not used as evidence until a report from the guided alert test is available.
+
 ## S2, S5, S6: service, coexistence, power
 
 The report was cut off after two events, so almost nothing is known:
