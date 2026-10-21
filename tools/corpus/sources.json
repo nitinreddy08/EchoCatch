@@ -1,0 +1,45 @@
+{
+  "_comment": "Downloadable inputs for the S4 detector benchmark (docs/plan/04-spikes.md). Nothing listed here is committed to the repository or shipped in the app. Every entry records its licence as stated by its source; unverified points are in 'licence_note'.",
+  "sources": [
+    {
+      "id": "kws-zipformer-gigaspeech-3.3M",
+      "role": "keyword-spotting model (candidate C1)",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/kws-models/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01.tar.bz2",
+      "sha256": "f170013b4716e41b62b9bfd809687c207cef798ef9bc6534d524e17af9b6561a",
+      "bytes": 17626723,
+      "extracts_to": "kws-zipformer-gigaspeech-3.3M",
+      "license": "Apache-2.0",
+      "licence_note": "From the model card README. The model was trained on GigaSpeech XL; the terms of that training data were not verified, so check them before bundling this model in the app (docs/plan/02-platform-facts.md, P27)."
+    },
+    {
+      "id": "kokoro-multi-lang-v1_0",
+      "role": "text-to-speech voices used only to synthesize test audio",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2",
+      "sha256": "c5f7e2d2caf082bc1d20fb70334a61d99d20b484500aad32e7cf84c128ea3298",
+      "bytes": 349906910,
+      "extracts_to": "kokoro-multi-lang-v1_0",
+      "license": "Apache-2.0",
+      "licence_note": "LICENSE file in the archive is Apache-2.0. Used to make test audio only; never shipped."
+    },
+    {
+      "id": "gutenberg-text",
+      "role": "public-domain text for the sentences spoken by the synthetic talkers",
+      "url": "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/gutenberg.zip",
+      "sha256": "2d3c3ab548c653944310f37f536443ec85d0a0ad855fcae217a0c9efdce2d611",
+      "bytes": 4251829,
+      "extracts_to": "gutenberg",
+      "license": "LicenseRef-PublicDomain",
+      "licence_note": "Project Gutenberg texts as packaged by the NLTK data project. Public-domain books; checksum is pinned on first fetch (fetch.py --pin)."
+    },
+    {
+      "id": "silero-vad",
+      "role": "voice-activity model for the duty-cycle measurement (candidate stage 1)",
+      "url": "https://raw.githubusercontent.com/snakers4/silero-vad/v6.2.3/src/silero_vad/data/silero_vad.onnx",
+      "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+      "bytes": 0,
+      "extracts_to": "silero-vad",
+      "license": "MIT",
+      "licence_note": "LICENSE of the silero-vad repository at tag v6.2.3 (checked 2026-10-21). The pip package of the same name is not used because it requires PyTorch."
+    }
+  ]
+}

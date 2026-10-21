@@ -1,0 +1,48 @@
+{
+  "_comment": "Names for the S4 benchmark (docs/plan/04-spikes.md). 'name' is what a user would type; 'say' is how the synthetic voice is told to pronounce it (the typed spelling is often not how people say it, so these respellings are approximations chosen by the project and should be checked by native speakers). 'aliases' are extra keyword spellings (as typed phonetically) used in the 'with aliases' engine variant.",
+  "voices": [
+    {"id": "af_heart", "sid": 3, "group": "us-english"},
+    {"id": "af_bella", "sid": 2, "group": "us-english"},
+    {"id": "am_adam", "sid": 11, "group": "us-english"},
+    {"id": "am_michael", "sid": 16, "group": "us-english"},
+    {"id": "bf_emma", "sid": 21, "group": "gb-english"},
+    {"id": "bm_george", "sid": 26, "group": "gb-english"},
+    {"id": "hf_alpha", "sid": 31, "group": "hindi-voice"},
+    {"id": "hm_omega", "sid": 33, "group": "hindi-voice"}
+  ],
+  "targets": [
+    {"name": "Alex", "say": "Alex", "aliases": []},
+    {"name": "Maya", "say": "Maya", "aliases": []},
+    {"name": "Jack", "say": "Jack", "aliases": []},
+    {"name": "Daniel", "say": "Daniel", "aliases": []},
+    {"name": "Priya", "say": "Preeya", "aliases": ["PREEYA"]},
+    {"name": "Arjun", "say": "Arjun", "aliases": []},
+    {"name": "Sofia", "say": "Sofia", "aliases": []},
+    {"name": "Alexandra", "say": "Alexandra", "aliases": []},
+    {"name": "Venkatesh", "say": "Venkatesh", "aliases": []},
+    {"name": "Siobhan", "say": "Shivawn", "aliases": ["SHIVAWN"]},
+    {"name": "Nguyen", "say": "Win", "aliases": ["WIN"]},
+    {"name": "Xiomara", "say": "See oh mara", "aliases": ["SEE OH MARA"]}
+  ],
+  "near_miss": [
+    {"name": "Mia", "say": "Mia", "confusable_with": "Maya"},
+    {"name": "Zack", "say": "Zack", "confusable_with": "Jack"},
+    {"name": "Danielle", "say": "Danielle", "confusable_with": "Daniel"},
+    {"name": "Sophie", "say": "Sophie", "confusable_with": "Sofia"},
+    {"name": "Pria", "say": "Pria", "confusable_with": "Priya"},
+    {"name": "Argon", "say": "Argon", "confusable_with": "Arjun"}
+  ],
+  "other_names": [
+    "Anna", "Ben", "Chris", "Dave", "Emma", "Fiona", "George", "Hannah", "Ian", "Julia", "Kevin", "Laura",
+    "Mark", "Nina", "Oscar", "Paul", "Rachel", "Sam", "Tom", "Ravi", "Anil", "Meera", "Kiran", "Deepak", "Anita"
+  ],
+  "lead_ins": ["Hey", "Excuse me", "Hello there", "Oh", "Listen"],
+  "follow_ons": [
+    "can you hear me",
+    "are you coming",
+    "over here",
+    "wait a second",
+    "I need your help",
+    "come and look at this"
+  ]
+}

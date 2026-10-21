@@ -34,6 +34,7 @@ ALLOWED_LICENSES = {
     "GPL-3.0-or-later",
     "CC0-1.0",
     "CC-BY-4.0",
+    "LicenseRef-PublicDomain",  # public-domain works, datasets only (ADR-0010 clarification)
 }
 SCOPES = {"build", "test", "runtime", "model", "data", "asset"}
 REQUIRED_FIELDS = ("name", "version", "license", "scope", "shipped", "source", "purpose")

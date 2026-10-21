@@ -25,6 +25,10 @@ Rules that follow:
 - Our own assets (for example the alert cues, ADR-0008) are authored by the project and released under CC0 or GPL-3.0-only, recorded in `docs/third-party.md` or the asset's metadata.
 - Contributions are accepted under the same licence. `CONTRIBUTING.md` (M0-T1) says so.
 
+## Clarification (2026-10-21)
+
+Public-domain works are allowed for datasets (SPDX-style identifier `LicenseRef-PublicDomain`), for example Project Gutenberg texts used to generate benchmark audio. The licence checker's allowlist includes it.
+
 ## Consequences
 
 - The planned libraries fit: sherpa-onnx is Apache-2.0 and Silero VAD is MIT (P23, P24). Apache-2.0 and MIT code can be included in a GPL-3.0 project.

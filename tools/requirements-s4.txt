@@ -1,0 +1,6 @@
+# Python tools for the S4 detector screening (tools/corpus, tools/s4). Development only: never shipped in the app.
+# Versions are the ones the first benchmark run used.
+numpy==2.5.4
+soundfile==0.14.0
+sherpa-onnx==1.13.8
+sentencepiece==0.2.2

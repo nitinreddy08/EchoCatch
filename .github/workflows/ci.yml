@@ -30,6 +30,12 @@ jobs:
           cmake --preset host-sanitize
           cmake --build --preset host-sanitize
           ctest --preset host-sanitize
+      - name: Benchmark tool tests (corpus and S4 scoring)
+        run: |
+          python3 -m venv .venv-tools
+          .venv-tools/bin/pip install --quiet numpy==2.5.4
+          .venv-tools/bin/python -I -m unittest discover -s tools/corpus/tests
+          .venv-tools/bin/python -I -m unittest discover -s tools/s4/tests
 
   jvm:
     name: Pure Kotlin modules

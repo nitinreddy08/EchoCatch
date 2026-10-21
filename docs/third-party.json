@@ -9,6 +9,78 @@
       "shipped": false,
       "source": "https://github.com/google/googletest",
       "purpose": "C++ unit tests for the native core (host only, not shipped in the app)"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.4",
+      "license": "BSD-3-Clause",
+      "scope": "test",
+      "shipped": false,
+      "source": "https://numpy.org",
+      "purpose": "Python benchmark tools (tools/corpus, tools/s4); development only"
+    },
+    {
+      "name": "python-soundfile",
+      "version": "0.14.0",
+      "license": "BSD-3-Clause",
+      "scope": "test",
+      "shipped": false,
+      "source": "https://github.com/bastibe/python-soundfile",
+      "purpose": "WAV reading and writing in the benchmark tools; development only (uses libsndfile, LGPL-2.1)"
+    },
+    {
+      "name": "sherpa-onnx (Python)",
+      "version": "1.13.8",
+      "license": "Apache-2.0",
+      "scope": "test",
+      "shipped": false,
+      "source": "https://github.com/k2-fsa/sherpa-onnx",
+      "purpose": "Keyword-spotting engine and text-to-speech runtime for the S4 screening"
+    },
+    {
+      "name": "SentencePiece",
+      "version": "0.2.2",
+      "license": "Apache-2.0",
+      "scope": "test",
+      "shipped": false,
+      "source": "https://github.com/google/sentencepiece",
+      "purpose": "Tokenises typed names into the keyword model's BPE pieces in the benchmark tools"
+    },
+    {
+      "name": "sherpa-onnx KWS zipformer gigaspeech 3.3M",
+      "version": "2024-01-01",
+      "license": "Apache-2.0",
+      "scope": "model",
+      "shipped": false,
+      "source": "https://github.com/k2-fsa/sherpa-onnx/releases/tag/kws-models",
+      "purpose": "Candidate C1 keyword-spotting model, screening only. Model card says Apache-2.0; the terms of its GigaSpeech training data are unverified, so it must be checked before it is bundled in the app"
+    },
+    {
+      "name": "Kokoro multi-lang v1.0 (sherpa-onnx build)",
+      "version": "1.0",
+      "license": "Apache-2.0",
+      "scope": "model",
+      "shipped": false,
+      "source": "https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models",
+      "purpose": "Synthetic voices that generate the benchmark's test audio; never shipped"
+    },
+    {
+      "name": "Silero VAD",
+      "version": "6.2.3",
+      "license": "MIT",
+      "scope": "model",
+      "shipped": false,
+      "source": "https://github.com/snakers4/silero-vad",
+      "purpose": "Voice-activity model for the duty-cycle measurement; a candidate stage 1 of the pipeline"
+    },
+    {
+      "name": "Project Gutenberg texts (NLTK data packaging)",
+      "version": "2026-10-21",
+      "license": "LicenseRef-PublicDomain",
+      "scope": "data",
+      "shipped": false,
+      "source": "https://github.com/nltk/nltk_data",
+      "purpose": "Public-domain book sentences spoken by the synthetic talkers in benchmark scenes"
     }
   ],
   "rejected": [
