@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Temporary: prints the current androidx versions and their compileSdk requirements because the
+# development sandbox cannot reach Google Maven. Deleted in the next commit.
+name: probe-versions
+
+on:
+  push:
+    paths:
+      - ".github/workflows/probe-versions.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print release versions and requirements
+        shell: bash
+        run: |
+          set -u
+          base=https://dl.google.com/dl/android/maven2
+          for art in androidx/compose/compose-bom androidx/compose/ui/ui androidx/compose/material3/material3 \
+                     androidx/activity/activity-compose androidx/lifecycle/lifecycle-runtime-compose \
+                     androidx/lifecycle/lifecycle-service androidx/lifecycle/lifecycle-viewmodel-compose \
+                     androidx/datastore/datastore-preferences androidx/navigation/navigation-compose \
+                     androidx/core/core-ktx androidx/test/ext/junit androidx/test/runner \
+                     androidx/test/uiautomator/uiautomator androidx/test/espresso/espresso-core; do
+            echo "== $art"
+            curl -fsS "$base/$art/maven-metadata.xml" | python3 -c '
+          import re, sys
+          text = sys.stdin.read()
+          for tag in ("latest", "release", "lastUpdated"):
+              m = re.search(rf"<{tag}>(.*?)</{tag}>", text)
+              print(f"  {tag}: {m.group(1) if m else None}")
+          versions = re.findall(r"<version>(.*?)</version>", text)
+          print("  last versions:", ", ".join(versions[-10:]))
+          '
+          done
+
+      - name: Compose BOM mapping and AAR requirements
+        shell: bash
+        run: |
+          set -u
+          base=https://dl.google.com/dl/android/maven2
+          bom=$(curl -fsS "$base/androidx/compose/compose-bom/maven-metadata.xml" | python3 -c 'import re,sys; print(re.search(r"<release>(.*?)</release>", sys.stdin.read()).group(1))')
+          echo "latest release BOM: $bom"
+          curl -fsS "$base/androidx/compose/compose-bom/$bom/compose-bom-$bom.pom" | python3 -c '
+          import re, sys
+          text = sys.stdin.read()
+          for g, a, v in re.findall(r"<groupId>(androidx\.compose[^<]*)</groupId>\s*<artifactId>([^<]+)</artifactId>\s*<version>([^<]+)</version>", text):
+              if a in ("ui", "material3", "foundation", "runtime", "material-icons-core", "material-icons-extended", "ui-tooling", "ui-test-junit4"):
+                  print(f"  {g}:{a}:{v}")
+          ' > /tmp/bom.txt
+          cat /tmp/bom.txt
+          ui=$(grep ":ui:" /tmp/bom.txt | head -1 | awk -F: '{print $3}')
+          m3=$(grep "material3:material3:" /tmp/bom.txt | head -1 | awk -F: '{print $3}')
+          mkdir -p /tmp/aar && cd /tmp/aar
+          for spec in "androidx/compose/ui/ui-android/$ui/ui-android-$ui.aar" "androidx/compose/material3/material3-android/$m3/material3-android-$m3.aar"; do
+            echo "== $spec"
+            curl -fsS -o x.aar "$base/$spec" && unzip -p x.aar META-INF/com/android/build/gradle/aar-metadata.properties
+          done
