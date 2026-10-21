@@ -49,35 +49,21 @@ jobs:
                   return f"{name}: " + " ".join(l for l in props.splitlines() if l.startswith(keep))
               return "no aar metadata found"
 
-          print("== artifacts")
-          for group, artifact in [
-              ("androidx/activity", "activity-compose"),
-              ("androidx/lifecycle", "lifecycle-runtime-compose"),
-              ("androidx/lifecycle", "lifecycle-service"),
-              ("androidx/lifecycle", "lifecycle-viewmodel-compose"),
-              ("androidx/datastore", "datastore-preferences"),
-              ("androidx/core", "core-ktx"),
-              ("androidx/test/ext", "junit"),
-              ("androidx/test", "runner"),
-              ("androidx/test", "rules"),
+          print("== specific versions")
+          for group, artifact, version in [
+              ("androidx/lifecycle", "lifecycle-runtime-compose", "2.10.0"),
+              ("androidx/lifecycle", "lifecycle-runtime-compose", "2.9.4"),
+              ("androidx/lifecycle", "lifecycle-runtime", "2.10.0"),
+              ("androidx/core", "core-ktx", "1.18.0"),
+              ("androidx/core", "core-ktx", "1.17.0"),
+              ("androidx/core", "core", "1.18.0"),
+              ("androidx/core", "core", "1.17.0"),
+              ("androidx/activity", "activity-compose", "1.13.0"),
+              ("androidx/activity", "activity", "1.13.0"),
+              ("androidx/compose/ui", "ui", "1.11.4"),
+              ("androidx/compose/material3", "material3", "1.4.0"),
+              ("androidx/datastore", "datastore-preferences", "1.2.1"),
+              ("androidx/datastore", "datastore-core", "1.2.1"),
           ]:
-              st = stable(versions(group, artifact))
-              latest = st[-1] if st else None
-              print(f"{group}/{artifact}: last stable {st[-4:]}")
-              if latest:
-                  print("   ", latest, aar_meta(group, artifact, latest))
-
-          print("== BOM history")
-          boms = versions("androidx/compose", "compose-bom")[-7:]
-          seen = {}
-          for bom in boms:
-              pom = get(f"androidx/compose/compose-bom/{bom}/compose-bom-{bom}.pom").decode()
-              found = dict(
-                  (a, v) for a, v in re.findall(
-                      r"<groupId>androidx\.compose[^<]*</groupId>\s*<artifactId>([^<]+)</artifactId>\s*<version>([^<]+)</version>", pom)
-                  if a in ("ui", "material3"))
-              print(bom, found)
-              seen[found.get("ui")] = bom
-          for ui in seen:
-              print("ui", ui, aar_meta("androidx/compose/ui", "ui", ui))
+              print(f"{artifact} {version}:", aar_meta(group, artifact, version))
           PY
