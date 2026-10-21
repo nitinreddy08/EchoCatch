@@ -28,10 +28,15 @@ _engine = None
 _scene_dir = None
 
 
-def _init(model, names, with_aliases, boost, threshold, scene_dir):
+def _init(settings, names, with_aliases, boost, threshold, scene_dir):
     global _engine, _scene_dir
     _scene_dir = Path(scene_dir)
-    _engine = engines.SherpaKws(model, names, with_aliases, boost, threshold, work_dir=tempfile.gettempdir())
+    work = tempfile.gettempdir()
+    if settings["engine"] == "asr":
+        _engine = engines.SherpaAsrHotwords(settings["model"], settings["bpe_model"], names, with_aliases, boost,
+                                            settings["encoder_tag"], work_dir=work)
+    else:
+        _engine = engines.SherpaKws(settings["model"], names, with_aliases, boost, threshold, work_dir=work)
 
 
 def _run(scene_id):
@@ -42,17 +47,19 @@ def _run(scene_id):
     return scene_id, hits, _engine.cpu_seconds - before_cpu, _engine.audio_seconds - before_audio
 
 
-def evaluate(model, names, rows, scene_dir, with_aliases, boost, threshold, workers):
+def evaluate(settings, names, rows, scene_dir, with_aliases, boost, threshold, workers, dump=None):
     ids = [r["id"] for r in rows]
     detections, cpu, audio_seconds = {}, 0.0, 0.0
     with ProcessPoolExecutor(max_workers=workers, initializer=_init,
-                             initargs=(model, names, with_aliases, boost, threshold, str(scene_dir))) as pool:
+                             initargs=(settings, names, with_aliases, boost, threshold, str(scene_dir))) as pool:
         for scene_id, hits, cpu_s, audio_s in pool.map(_run, ids, chunksize=8):
             detections[scene_id] = hits
             cpu += cpu_s
             audio_seconds += audio_s
     result = metrics.score(rows, detections)
-    result["config"] = {"boost": boost, "threshold": threshold, "aliases": with_aliases}
+    if dump is not None:
+        dump.append({"config": {"boost": boost, "threshold": threshold, "aliases": with_aliases}, "detections": detections})
+    result["config"] = {"engine": settings["engine"], "boost": boost, "threshold": threshold, "aliases": with_aliases}
     result["host_cpu_realtime_factor"] = cpu / audio_seconds if audio_seconds else None
     return result
 
@@ -66,7 +73,7 @@ def summary_line(result):
     by_snr = result["recall_by_snr_db"]
     snr = " ".join(f"{k}dB:{v['recall']:.2f}" for k, v in by_snr.items())
     neg = result["negatives"]
-    return (f"boost={result['config']['boost']:<4} thr={result['config']['threshold']:<5} alias={int(result['config']['aliases'])} "
+    return (f"{result['config']['engine']} boost={result['config']['boost']:<4} thr={result['config']['threshold']:<5} alias={int(result['config']['aliases'])} "
             f"recall={_fmt(p and p['recall'], '.3f')} [{snr}] FA/h={_fmt(neg['false_alarms_per_hour_all_names'], '.2f')} "
             f"nearmiss={neg['near_miss_accepts']}/{neg['near_miss_scenes']} "
             f"t50={_fmt(result['t_detect_s']['p50'], '.2f')} "
@@ -76,7 +83,13 @@ def summary_line(result):
 def main(argv):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", default=os.environ.get("ECHOCATCH_DATA"))
+    parser.add_argument("--engine", choices=["kws", "asr"], default="kws")
     parser.add_argument("--model", required=True)
+    parser.add_argument("--bpe-model", help="BPE model for hotword tokenisation (engine asr)")
+    parser.add_argument("--encoder-tag", default="epoch-99-avg-1-chunk-16-left-128", help="file name tag of the ASR model (engine asr)")
+    parser.add_argument("--boosts", help="comma-separated boost values for --sweep")
+    parser.add_argument("--thresholds", help="comma-separated threshold values for --sweep (engine kws)")
+    parser.add_argument("--dump", help="write the raw detections of every configuration to this JSON file")
     parser.add_argument("--aliases", action="store_true")
     parser.add_argument("--boost", type=float, default=1.0)
     parser.add_argument("--threshold", type=float, default=0.25)
@@ -93,14 +106,19 @@ def main(argv):
         rows = rows[: args.limit]
     names = json.loads((HERE.parent / "corpus" / "names.json").read_text(encoding="utf-8"))["targets"]
 
+    settings = {"engine": args.engine, "model": args.model, "bpe_model": args.bpe_model, "encoder_tag": args.encoder_tag}
     grid = [(args.boost, args.threshold)]
     if args.sweep:
-        grid = [(b, t) for b in (1.0, 2.0, 3.0) for t in (0.1, 0.25, 0.4)]
-    results = []
+        boosts = [float(x) for x in args.boosts.split(",")] if args.boosts else [1.0, 2.0, 3.0]
+        thresholds = [float(x) for x in args.thresholds.split(",")] if args.thresholds else ([0.1, 0.25, 0.4] if args.engine == "kws" else [0.0])
+        grid = [(b, t) for b in boosts for t in thresholds]
+    results, dump = [], ([] if args.dump else None)
     for boost, threshold in grid:
-        result = evaluate(args.model, names, rows, scene_dir, args.aliases, boost, threshold, args.workers)
+        result = evaluate(settings, names, rows, scene_dir, args.aliases, boost, threshold, args.workers, dump)
         results.append(result)
         print(summary_line(result), flush=True)
+    if args.dump:
+        Path(args.dump).write_text(json.dumps(dump) + "\n", encoding="utf-8")
     if args.out:
         Path(args.out).write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     return 0

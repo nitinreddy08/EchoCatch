@@ -40,6 +40,26 @@
       "extracts_to": "silero-vad",
       "license": "MIT",
       "licence_note": "LICENSE of the silero-vad repository at tag v6.2.3 (checked 2026-10-21). The pip package of the same name is not used because it requires PyTorch."
+    },
+    {
+      "id": "asr-zipformer-en-20M",
+      "role": "small streaming speech recogniser with hotword boosting (candidate C4)",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-en-20M-2023-02-17.tar.bz2",
+      "sha256": "9c559283e8498d3fe95913c79ca1cb454bb26281ac2b102b41306c7d752765d9",
+      "bytes": 127887156,
+      "extracts_to": "asr-20M",
+      "license": "Apache-2.0",
+      "licence_note": "Model card says apache-2.0. Exported from an icefall LibriSpeech model (LibriSpeech is CC BY 4.0). Training data lineage taken from the model card links, not independently verified."
+    },
+    {
+      "id": "asr-zipformer-en-70M",
+      "role": "larger streaming speech recogniser with hotword boosting (candidate C4), also provides bpe.model",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-streaming-zipformer-en-2023-06-26.tar.bz2",
+      "sha256": "639e25b578e9e997131402199419c13a941f8e4e198e2da1ce57dbf5cf401282",
+      "bytes": 310414022,
+      "extracts_to": "asr-70M",
+      "license": "Apache-2.0",
+      "licence_note": "Model card says apache-2.0. Converted from an icefall LibriSpeech streaming zipformer (links on the model card). Training data lineage not independently verified."
     }
   ]
 }

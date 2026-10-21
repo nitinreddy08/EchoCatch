@@ -127,10 +127,12 @@ Each name is also tested with a nickname where natural (for example Alexandra ‚Ü
 
 **To establish first (the unknowns):** how keywords are specified for C1 (P26), the licences of the model files (P27), and whether non-English or Indian-English names work with the English model (P25).
 
-**Method:**
-1. Build the corpus (`tools/corpus`): positives made by mixing recorded and synthetic name utterances into noise at 20, 10, 5, and 0 dB SNR; negatives of several hours of speech without the name, TV, music, street, and caf√© noise. Test names must include short, long, and phonetically tricky names. Use only datasets whose licences allow this, recorded in the corpus manifest.
-2. Run each candidate in `tools/bench` on the host. Report recall at each SNR, FA/h, T_detect, duty cycle, and CPU time per audio-second.
-3. Run the top candidates on the user's phone and measure on-device CPU and wake-ups (simpleperf or Perfetto).
+**Method (as built, 2026-10-21):**
+1. **Corpus (`tools/corpus`).** Stage 1 is **synthetic**: eight Kokoro voices (US, GB and two "Hindi-voice" speakers reading English) say the test names, near-miss names and public-domain sentences; scenes mix them into babble, synthetic street noise, a competing talker or a quiet room at 20, 10, 5 and 0 dB SNR. Real speech and noise corpora (OpenSLR, Zenodo, Hugging Face) were not reachable from the development sandbox. Stage 2 repeats the key runs with real recordings (the owner's voice, volunteers, real noise sets) before any acceptance claim.
+2. **Screening (`tools/s4`, Python).** Each candidate runs over the scenes; the report gives recall by SNR, false alarms per hour, near-miss accepts, T_detect and host CPU cost, plus the VAD gate's duty cycle (`vad_duty.py`). The Python harness picks the engine quickly; the C++ benchmark (`tools/bench`) takes over afterwards to gate regressions in CI.
+3. **On device.** Run the top candidates on the user's phone and measure on-device CPU and wake-ups (simpleperf or Perfetto).
+
+Limits of stage 1: synthetic voices and noise are cleaner and more regular than real ones, and the pronunciations of hard names are the project's approximations (`tools/corpus/names.json`). Treat the numbers as a screening comparison between engines and settings, not as the product's accuracy.
 
 **Decision rule (ADR-0003):** the simplest candidate that meets NFR-1, 3, 4, 5, 6, 8. Add stage 2 only if needed.
 

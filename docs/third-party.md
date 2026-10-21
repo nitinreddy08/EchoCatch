@@ -8,6 +8,7 @@ Allowed licences are defined in [ADR-0010](adr/0010-license-gpl-3.0.md).
 | Name | Version | Licence | Scope | Shipped | Purpose |
 |---|---|---|---|---|---|
 | [GoogleTest](https://github.com/google/googletest) | 1.15.2 | BSD-3-Clause | test | no | C++ unit tests for the native core (host only, not shipped in the app) |
+| [jellyfish](https://github.com/jamesturk/jellyfish) | 1.3.0 | MIT | test | no | Metaphone keys for phonetic name matching in the S4 benchmark tools; development only |
 | [Kokoro multi-lang v1.0 (sherpa-onnx build)](https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models) | 1.0 | Apache-2.0 | model | no | Synthetic voices that generate the benchmark's test audio; never shipped |
 | [numpy](https://numpy.org) | 2.5.4 | BSD-3-Clause | test | no | Python benchmark tools (tools/corpus, tools/s4); development only |
 | [Project Gutenberg texts (NLTK data packaging)](https://github.com/nltk/nltk_data) | 2026-10-21 | LicenseRef-PublicDomain | data | no | Public-domain book sentences spoken by the synthetic talkers in benchmark scenes |
@@ -15,6 +16,8 @@ Allowed licences are defined in [ADR-0010](adr/0010-license-gpl-3.0.md).
 | [SentencePiece](https://github.com/google/sentencepiece) | 0.2.2 | Apache-2.0 | test | no | Tokenises typed names into the keyword model's BPE pieces in the benchmark tools |
 | [sherpa-onnx (Python)](https://github.com/k2-fsa/sherpa-onnx) | 1.13.8 | Apache-2.0 | test | no | Keyword-spotting engine and text-to-speech runtime for the S4 screening |
 | [sherpa-onnx KWS zipformer gigaspeech 3.3M](https://github.com/k2-fsa/sherpa-onnx/releases/tag/kws-models) | 2024-01-01 | Apache-2.0 | model | no | Candidate C1 keyword-spotting model, screening only. Model card says Apache-2.0; the terms of its GigaSpeech training data are unverified, so it must be checked before it is bundled in the app |
+| [sherpa-onnx streaming zipformer en 20M](https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models) | 2023-02-17 | Apache-2.0 | model | no | Candidate C4: small streaming recogniser with hotword boosting, screening only. Model card says Apache-2.0 and links an icefall LibriSpeech model |
+| [sherpa-onnx streaming zipformer en 70M](https://github.com/k2-fsa/sherpa-onnx/releases/tag/asr-models) | 2023-06-26 | Apache-2.0 | model | no | Candidate C4: larger streaming recogniser with hotword boosting, screening only; also provides the BPE model. Model card says Apache-2.0 and links an icefall LibriSpeech model |
 | [Silero VAD](https://github.com/snakers4/silero-vad) | 6.2.3 | MIT | model | no | Voice-activity model for the duty-cycle measurement; a candidate stage 1 of the pipeline |
 
 ## Evaluated and rejected

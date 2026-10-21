@@ -90,6 +90,20 @@ Evidence: [first-run results](../spikes/results/2026-10-21-first-run-oneplus-11r
 | P47 | The call link reports the phone's name as its product name, not the earbuds'. Product names cannot identify a headset. | VERIFIED on device |
 | P48 | Opening the phone microphone with `AudioRecord` at 16 kHz returns data in about 0.2 s while music plays through the earbuds. | VERIFIED on device |
 
+## Detector and development environment (S4 screening, 2026-10-21)
+
+Evidence: [S4 first screening](../spikes/results/S4-first-screening-2026-10-21.md). Synthetic scenes only.
+
+| # | Fact | Tag |
+|---|---|---|
+| P49 | sherpa-onnx's keyword spotter takes **arbitrary typed text**: the text is split into the model's BPE pieces (SentencePiece, using the model's `bpe.model`) and written one keyword per line. Every target name tokenised into pieces the model knows. This resolves P26. | VERIFIED |
+| P50 | The English keyword model (`kws-zipformer-gigaspeech-3.3M`) runs at about 0.02 times real time on one host CPU thread and detects its own test keywords. | VERIFIED (host) |
+| P51 | With typed spellings the spotter's recall depends heavily on the name: 0.87 for Daniel and 0.72 for Alex, but about 0 for Alexandra, Nguyen, Siobhan, Venkatesh and Xiomara in the synthetic benchmark. | VERIFIED (synthetic data) |
+| P52 | Small LibriSpeech-trained streaming recognisers (20M and 70M parameters) write rare names by sound ("SOPHIA", "PRIA", "CHIVONNE", "WHEN" for Nguyen), so exact-spelling matching misses them. Their host cost is about 0.03 (20M) and 0.08 (70M) times real time. | VERIFIED (synthetic data) |
+| P53 | A recogniser's transcript matched by Metaphone key finds many more names but also raises false alarms sharply for short names and common words. Telling the matcher how the name sounds (respelled aliases) lifted recall for hard names from about 0 to 0.5 to 0.7. | VERIFIED (synthetic data) |
+| P54 | The models' training-data terms: the keyword model card says Apache-2.0 and the model was trained on GigaSpeech XL, whose data terms could not be verified; the two recognisers link to icefall LibriSpeech models (LibriSpeech is CC BY 4.0). This narrows P27 but does not close it. | PARTLY VERIFIED |
+| P55 | In the development sandbox: GitHub release downloads, `raw.githubusercontent.com`, PyPI, npm and the Ubuntu archive are reachable. OpenSLR, Zenodo, Hugging Face, `dl.google.com` and `support.google.com` are not. Real speech and noise corpora therefore could not be fetched. | VERIFIED (2026-10-21) |
+
 ## Distribution (ADR-0011)
 
 | # | Fact | Tag | Source |

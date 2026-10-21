@@ -17,7 +17,10 @@ Each task is sized for one pull request (roughly ≤ 400 changed lines) so an AI
 | M0-T7a S1 route test, T7c S3 ducking test, T7b S2 service lifecycle (with S5 coexistence logging) and T7f S6 battery sampling | done, awaiting hardware runs. S6 covers runs R0 to R2 only; R3 and R4 need the native pipeline (M2), and R5 (Oboe versus `AudioRecord`) needs native code (M1) |
 | M0-T7d S4 detector benchmark | not started. It is host-side work belonging to M2 (corpus tooling and the bench CLI) and does not need a phone |
 | M0-T8 hardware runs | first run done 2026-10-21, partial ([results](../spikes/results/2026-10-21-first-run-oneplus-11r-buds-4.md)). Phone microphone and one ducking combination work; the earbuds' microphone returned silence with the method tried, and the call-route method, most ducking combinations, and the service test (cut off) remain. Lab app v2 with guided tests is built; next run follows `docs/spikes/runbook-oneplus-11r-buds-4.md` |
-| M0-T9 ratify ADRs | blocked on M0-T8 and S4 |
+| M2-T1 corpus tooling | done (`tools/corpus`: manifest with licences and checksums, synthetic voices, mixing, labelled scenes) |
+| M2-T4, M2-T5 (screening) | done in Python for the first comparison (`tools/s4`); the C++ bench follows once an engine is chosen |
+| M2-T6 first S4 report | done 2026-10-21 ([S4 first screening](../spikes/results/S4-first-screening-2026-10-21.md)): no candidate meets the provisional budgets on synthetic scenes; real recordings are the next evidence |
+| M0-T9 ratify ADRs | blocked on M0-T8 and a real-recording S4 run |
 
 ## Milestone map
 

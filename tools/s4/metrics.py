@@ -80,7 +80,11 @@ def score(rows: list[dict], detections: dict[str, list[tuple[float, str]]]) -> d
             if any(label.lower() == r["confusable_with"].lower() for _, label in found):
                 near_miss_accepts += 1
     total_false_alarms = sum(false_alarms.values())
+    ordinary_hours = sum(r["duration_s"] for r in negatives if r["kind"] != "near_miss") / 3600.0
+    ordinary_false_alarms = total_false_alarms - false_alarms.get("near_miss", 0)
     result["negatives"] = {
+        "ordinary_hours": ordinary_hours,
+        "false_alarms_per_hour_ordinary": ordinary_false_alarms / ordinary_hours if ordinary_hours else None,
         "scenes": len(negatives),
         "hours": negative_hours,
         "false_alarms": total_false_alarms,

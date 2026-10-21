@@ -8,7 +8,7 @@ Numbers marked **⚠** are placeholders until the M0 spikes produce baselines (A
 
 | ID | Requirement |
 |---|---|
-| FR-1 | The user enters their name (and up to two nicknames) as text. Optional spoken samples may be added if the detector ADR calls for them. |
+| FR-1 | The user enters their name (and up to two nicknames) as text, plus an optional "how it sounds" spelling (for example "Shivawn" for Siobhan). Optional spoken samples may be added if the detector ADR calls for them. Evidence: S4 first screening showed that typed spelling alone fails for many names and that a sound-based hint lifts recall for hard names from about 0 to 0.5 to 0.7 (P51, P53). |
 | FR-2 | The user can enable and disable listening from the app UI and from the persistent notification (Stop action). Other start surfaces (Quick Settings tile, widget) depend on spike S2. |
 | FR-3 | Arming policy, user-selectable: **(a)** always while enabled, **(b)** only while a headset is connected, **(c)** only while a headset is connected *and* audio is playing. Default: (c), pending S2. |
 | FR-4 | On detection, the app requests transient audio focus, plays a short pre-recorded cue, then releases focus so the media resumes (ADR-0005, ADR-0008). |
@@ -19,6 +19,7 @@ Numbers marked **⚠** are placeholders until the M0 spikes produce baselines (A
 | FR-9 | The notification and the status screen always show the true state: Disarmed, Armed-idle, Listening, Alerting. |
 | FR-10 | Local diagnostics: counters only (detections, alerts, source in use). No audio is recorded or exported in v1. |
 | FR-11 | A "Test my headset" wizard (about 30 s) opens the headset mic route and records which device type, sample rate, and codec result, and whether music keeps playing. It saves a per-headset profile locally (preferred source) and recommends a source. It can export a device report (JSON the user shares manually, with no audio) for the compatibility matrix. The phone mic is always the fallback. |
+| FR-12 | **Name check (proposed).** When the user enters a name, the app estimates how reliably that name can be detected (recall and false alarms in noise, from synthetic or spoken test clips) and says so plainly, suggesting a spoken sample or a "how it sounds" spelling when the estimate is low. Detection quality varies enormously by name (S4 first screening), so the user should know. Needs an ADR before it is built. |
 
 ## Non-functional requirements and budgets
 

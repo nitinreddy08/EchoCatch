@@ -47,6 +47,14 @@ class MetricsTest(unittest.TestCase):
         self.assertEqual(result["negatives"]["false_alarms"], 3)
         self.assertAlmostEqual(result["negatives"]["false_alarms_per_hour_all_names"], 3.0)
 
+    def test_ordinary_false_alarm_rate_leaves_out_near_miss_scenes(self):
+        rows = [negative(f"n{i}") for i in range(225)] + [negative(f"m{i}", "near_miss", "Mia", "Maya") for i in range(225)]
+        detections = {"n1": [(1.0, "Alex")], "m1": [(2.0, "Maya")], "m2": [(2.0, "Maya")], "m3": [(2.0, "Maya")]}
+        result = metrics.score(rows, detections)["negatives"]
+        self.assertAlmostEqual(result["false_alarms_per_hour_all_names"], 4.0)  # 4 alarms in 1 hour
+        self.assertAlmostEqual(result["ordinary_hours"], 0.5)
+        self.assertAlmostEqual(result["false_alarms_per_hour_ordinary"], 2.0)  # 1 alarm in half an hour
+
     def test_near_miss_accept_counts_only_the_confusable_name(self):
         rows = [negative("a", "near_miss", "Mia", "Maya"), negative("b", "near_miss", "Zack", "Jack"), negative("c", "near_miss", "Pria", "Priya")]
         detections = {"a": [(3.0, "Maya")], "b": [(3.0, "Alex")]}
