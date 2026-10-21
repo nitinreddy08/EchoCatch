@@ -2,21 +2,42 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- No permissions yet. The approved list is in tools/ci/approved-permissions.txt (ADR-0007). -->
+    <!--
+        The approved list is tools/ci/approved-permissions.txt; CI fails on anything else, and never allows INTERNET (ADR-0007).
+        RECORD_AUDIO: hear the surroundings while Listening is on. Asked inside the app after a plain explanation.
+        FOREGROUND_SERVICE and FOREGROUND_SERVICE_MICROPHONE: keep listening when the screen is off (Android requires both).
+        POST_NOTIFICATIONS: show the listening notification with its Stop button (Android 13 and newer).
+    -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".EchoCatchApp"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        android:theme="@style/Theme.EchoCatch">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Started only from a visible screen or a notification action (ADR-0004). Not exported. -->
+        <service
+            android:name=".service.ListeningService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
     </application>
 
 </manifest>

@@ -1,23 +1,23 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.github.nitinreddy08.echocatch
 
-import android.app.Activity
 import android.os.Bundle
-import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import io.github.nitinreddy08.echocatch.ui.AppRoot
+import io.github.nitinreddy08.echocatch.ui.EchoCatchTheme
 
-/** Placeholder screen. The real UI (Compose) arrives in milestone M1. */
-class MainActivity : Activity() {
+/** The single screen host. Everything the user sees, including the permission questions, is inside the app (see ui/). */
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        val message = TextView(this).apply {
-            text = getString(R.string.skeleton_message)
-            textSize = 18f
-            setPadding(PADDING_PX, PADDING_PX, PADDING_PX, PADDING_PX)
+        val graph = (application as EchoCatchApp).graph
+        setContent {
+            EchoCatchTheme {
+                AppRoot(graph)
+            }
         }
-        setContentView(message)
-    }
-
-    private companion object {
-        const val PADDING_PX = 48
     }
 }

@@ -108,6 +108,69 @@
       "shipped": false,
       "source": "https://github.com/jamesturk/jellyfish",
       "purpose": "Metaphone keys for phonetic name matching in the S4 benchmark tools; development only"
+    },
+    {
+      "name": "Jetpack Compose UI, Foundation and Runtime (BOM 2026.06.01)",
+      "version": "1.11.4",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/compose",
+      "purpose": "Screens of the app (onboarding, home, settings). Versions are pinned through the Compose BOM; checked 2026-10-21 that the Maven POM and the AAR metadata need compileSdk 35 or lower."
+    },
+    {
+      "name": "Jetpack Compose Material 3 (BOM 2026.06.01)",
+      "version": "1.4.0",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/compose-material3",
+      "purpose": "Buttons, text fields, cards and theming for the screens."
+    },
+    {
+      "name": "AndroidX Activity Compose",
+      "version": "1.13.0",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/activity",
+      "purpose": "Hosts the Compose UI, edge-to-edge drawing, back handling and the permission request launcher."
+    },
+    {
+      "name": "AndroidX Lifecycle Runtime Compose",
+      "version": "2.10.0",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/lifecycle",
+      "purpose": "Collects the listening status only while a screen is visible, so the level meter does not run in the background."
+    },
+    {
+      "name": "AndroidX Core",
+      "version": "1.18.0",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/core",
+      "purpose": "ServiceCompat, NotificationCompat, ContextCompat and ActivityCompat: version differences for the foreground service, notifications and permission checks."
+    },
+    {
+      "name": "AndroidX DataStore Preferences",
+      "version": "1.2.1",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://developer.android.com/jetpack/androidx/releases/datastore",
+      "purpose": "Stores the user's name and setup progress on the device (Settings default in docs/plan/03-architecture.md)."
+    },
+    {
+      "name": "Kotlin standard library and kotlinx.coroutines (transitive)",
+      "version": "Kotlin 2.4.21; coroutines resolved by Gradle",
+      "license": "Apache-2.0",
+      "scope": "runtime",
+      "shipped": true,
+      "source": "https://github.com/JetBrains/kotlin",
+      "purpose": "Pulled in by the AndroidX libraries above and by the Kotlin compiler; control-plane coroutines and the settings flow."
     }
   ],
   "rejected": [

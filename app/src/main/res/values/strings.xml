@@ -2,5 +2,97 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 <resources>
     <string name="app_name">EchoCatch</string>
-    <string name="skeleton_message">EchoCatch is under construction. This is the empty app skeleton (milestone M0).</string>
+
+    <!-- Setup: disclosure (shown before any system dialog) -->
+    <string name="disclosure_title">Before we start</string>
+    <string name="disclosure_intro">EchoCatch is built to notice when someone calls your name while you wear earphones, and then lower or pause your music so you can hear.</string>
+    <string name="disclosure_mic_heading">What it needs</string>
+    <string name="disclosure_mic_body">The phone\'s microphone, but only while you switch Listening on.</string>
+    <string name="disclosure_private_heading">What happens to the sound</string>
+    <string name="disclosure_private_body">It is analysed on this phone and thrown away. Nothing is recorded or saved, and nothing is sent anywhere: the app has no internet access at all.</string>
+    <string name="disclosure_visible_heading">What you will see</string>
+    <string name="disclosure_visible_body">Android shows a notification the whole time the microphone is open, with a Stop button.</string>
+    <string name="disclosure_early_heading">About this version</string>
+    <string name="disclosure_early_body">This early version only checks that the microphone and the background service work. It does not detect your name yet.</string>
+    <string name="disclosure_button">I understand, continue</string>
+
+    <!-- Setup: microphone -->
+    <string name="microphone_title">Allow the microphone</string>
+    <string name="microphone_body">Next, Android will ask whether EchoCatch may use the microphone. Choose \"While using the app\" (or \"Allow\"). The microphone is only used while Listening is on.</string>
+    <string name="microphone_button">Allow microphone</string>
+    <string name="microphone_blocked_title">Microphone is turned off</string>
+    <string name="microphone_blocked_body">Android is not showing the question any more, so it has to be switched on in the app settings: open Permissions, then Microphone, then choose Allow. Come back here afterwards.</string>
+    <string name="microphone_blocked_open_settings">Open app settings</string>
+    <string name="microphone_blocked_try_again">Ask again</string>
+
+    <!-- Setup: notifications -->
+    <string name="notifications_title">Show the listening notification</string>
+    <string name="notifications_body">While the microphone is open, Android requires a notification. Allowing notifications keeps it visible, with a Stop button. Without it, listening still works, but you could miss that the microphone is on.</string>
+    <string name="notifications_allow">Allow notifications</string>
+    <string name="notifications_not_now">Not now</string>
+
+    <!-- Setup: name -->
+    <string name="name_title">Whose name should it listen for?</string>
+    <string name="name_body">Type it the way you would write it. It stays on this phone.</string>
+    <string name="name_label">Your name</string>
+    <string name="nickname_label">Nickname (optional)</string>
+    <string name="nickname_two_label">Another nickname (optional)</string>
+    <string name="sounds_like_label">How it sounds (optional)</string>
+    <string name="sounds_like_hint">For names that are spelled differently from how they sound, for example \"Shivawn\" for Siobhan.</string>
+    <string name="name_save">Save and continue</string>
+    <string name="name_save_settings">Save</string>
+    <string name="name_saved">Saved</string>
+    <string name="name_error_empty">Enter a name.</string>
+    <string name="name_error_characters">Use letters, spaces, apostrophes, hyphens and full stops only.</string>
+    <string name="name_error_length">Keep each entry to 40 characters or fewer.</string>
+    <string name="name_error_nicknames">At most two nicknames.</string>
+
+    <!-- Home -->
+    <string name="home_name_line">Listening for: %1$s</string>
+    <string name="home_status_off">Listening is off</string>
+    <string name="home_status_on">Listening</string>
+    <string name="home_hint_off">Tap Start to open the microphone.</string>
+    <string name="home_hint_on">The microphone is open. Tap Stop, or use the notification, to close it.</string>
+    <string name="home_silent_warning">The microphone is open but only silence is arriving. Another app may be using it, or the phone has muted it.</string>
+    <string name="home_start">Start listening</string>
+    <string name="home_stop">Stop listening</string>
+    <string name="home_settings">Settings</string>
+    <string name="home_level_title">Microphone level</string>
+    <string name="home_level_format">%1$d dB (peak %2$d dB)</string>
+    <string name="home_notice_title">This version is a first step</string>
+    <string name="home_notice_body">It checks that the microphone and the background service work. It does not detect your name yet and will not pause your music.</string>
+    <string name="home_notification_hidden">Notifications are off for EchoCatch, so the listening notification may be hidden. Turn them on in Settings to see it and its Stop button.</string>
+
+    <!-- Why listening ended (status screen and notification) -->
+    <string name="stop_user">Listening was stopped.</string>
+    <string name="stop_permission">Listening stopped because EchoCatch does not have the microphone permission.</string>
+    <string name="stop_unavailable">Listening stopped because the microphone could not be opened. Another app or a phone call may be using it.</string>
+    <string name="stop_capture_error">Listening stopped because the microphone stopped delivering sound.</string>
+    <string name="stop_start_refused">Android did not let EchoCatch start listening in the background. Open the app and tap Start.</string>
+    <string name="stop_system">Listening was ended by Android, or the phone restarted. Tap Start to resume.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_name_title">Your name</string>
+    <string name="settings_permissions_title">Permissions</string>
+    <string name="settings_microphone">Microphone</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="permission_allowed">Allowed</string>
+    <string name="permission_not_allowed">Not allowed</string>
+    <string name="settings_open_app_settings">Open app settings</string>
+    <string name="settings_privacy_title">Privacy</string>
+    <string name="settings_privacy_body">Sound from the microphone is analysed on this phone and discarded. Nothing is recorded, saved or sent anywhere. The app has no internet permission.</string>
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_body">EchoCatch %1$s\nFree and open source (GPL-3.0-only).\ngithub.com/nitinreddy08/EchoCatch</string>
+
+    <!-- Service notifications -->
+    <string name="channel_listening">Listening</string>
+    <string name="channel_listening_description">Shown while the microphone is open.</string>
+    <string name="channel_stopped">Listening stopped</string>
+    <string name="channel_stopped_description">Tells you when listening ended without you stopping it.</string>
+    <string name="notification_listening_title">EchoCatch is listening</string>
+    <string name="notification_listening_text">The microphone is open. This version does not detect your name yet.</string>
+    <string name="notification_stop">Stop</string>
+    <string name="notification_stopped_title">EchoCatch stopped listening</string>
 </resources>

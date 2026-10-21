@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- The same dot-and-arcs mark as the notification icon, kept inside the 66 dp safe zone. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,46a8,8 0,1 0,0.01 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M64.93,40.98A17,17 0,0 1,64.93 67.02M43.07,67.02A17,17 0,0 1,43.07 40.98M72,32.55A28,28 0,0 1,72 75.45M36,75.45A28,28 0,0 1,36 32.55"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeWidth="5" />
+</vector>

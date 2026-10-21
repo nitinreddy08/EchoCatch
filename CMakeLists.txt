@@ -43,4 +43,8 @@ if(NOT ANDROID)
     NAME native_core_has_no_android_dependencies
     COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_SOURCE_DIR}/tools/ci/check_native_purity.py ${CMAKE_SOURCE_DIR}/native/pipeline
   )
+  add_test(
+    NAME app_sdk_checks_stay_in_the_platform_adapter
+    COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_SOURCE_DIR}/tools/ci/check_sdk_checks.py ${CMAKE_SOURCE_DIR}/app/src
+  )
 endif()

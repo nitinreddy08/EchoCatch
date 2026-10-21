@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- A dot with sound arcs on both sides: a call arriving. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,9.5a2.5,2.5 0,1 0,0.01 0z" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M15.54,7.79A5.5,5.5 0,0 1,15.54 16.21M8.46,16.21A5.5,5.5 0,0 1,8.46 7.79M17.79,5.11A9,9 0,0 1,17.79 18.89M6.21,18.89A9,9 0,0 1,6.21 5.11"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeWidth="2" />
+</vector>
