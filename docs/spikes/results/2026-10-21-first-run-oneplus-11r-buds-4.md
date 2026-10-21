@@ -57,7 +57,7 @@ Combination: focus `GAIN_TRANSIENT_MAY_DUCK`, usage `ASSISTANCE_NAVIGATION_GUIDA
 2. **The music player declares usage MEDIA with an unknown content type (0).** Per the official audio-focus guide (P7) such a player is eligible for automatic ducking. This is consistent with run 1, but it is one player.
 3. **Platform fact P12 is now verified on this device:** `getActivePlaybackConfigurations()` shows other apps' players with their usage and content type, and shows our own alert as usage 12 (navigation guidance), content type 1 (speech) while it plays.
 4. **The music volume index did not change** (81 throughout), which suggests the system ducked the player, not the music stream. This is an inference.
-5. **Which player was tested was not recorded** (the field held something else), and podcast or speech players, other focus types and other alert attributes were not tested. S3 remains open.
+5. **The player was the Brave browser playing YouTube in the background** (reported by the tester afterwards, because the app's field did not record it). A browser tab is a different player from the YouTube app. Podcast or speech apps, other music apps, other focus types and other alert attributes were not tested. S3 remains open.
 
 ## S2, S5, S6: service, coexistence, power
 
