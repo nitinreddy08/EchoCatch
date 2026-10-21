@@ -25,6 +25,7 @@ internal fun SettingsScreen(
     notificationPermissionApplies: Boolean,
     onSaveName: (NameSettings) -> Unit,
     onOpenAppSettings: () -> Unit,
+    onOpenBatterySettings: () -> Unit,
     onBack: () -> Unit,
 ) {
     Page {
@@ -53,6 +54,13 @@ internal fun SettingsScreen(
         }
         OutlinedButton(onClick = onOpenAppSettings, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_open_app_settings))
+        }
+
+        HorizontalDivider()
+        Text(stringResource(R.string.settings_keep_title), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.settings_keep_body), style = MaterialTheme.typography.bodyMedium)
+        OutlinedButton(onClick = onOpenBatterySettings, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.settings_open_battery_settings))
         }
 
         HorizontalDivider()

@@ -3,6 +3,7 @@ package io.github.nitinreddy08.echocatch.ui
 
 import android.Manifest
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -50,4 +51,17 @@ internal fun openAppSettings(activity: Activity) {
     activity.startActivity(
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", activity.packageName, null)),
     )
+}
+
+/**
+ * Opens Android's battery optimisation list, where an app can be allowed to keep running in the background. This
+ * only opens a settings screen; the app never asks Android to ignore battery optimisation itself (ADR-0011). Falls
+ * back to the app's own settings page on phones that do not have that screen.
+ */
+internal fun openBatterySettings(activity: Activity) {
+    try {
+        activity.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+    } catch (e: ActivityNotFoundException) {
+        openAppSettings(activity)
+    }
 }

@@ -55,6 +55,10 @@ internal fun HomeScreen(
         StatusCard(status)
         if (status.isRunning) {
             LevelCard(store)
+            Text(
+                text = stringResource(R.string.home_running_tip),
+                style = MaterialTheme.typography.bodyMedium,
+            )
             OutlinedButton(onClick = onStop, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.home_stop))
             }

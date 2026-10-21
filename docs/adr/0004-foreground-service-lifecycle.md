@@ -3,7 +3,7 @@
 - **Status:** Proposed (depends on S2 and S5)
 - **Date:** 2026-10-20
 - **Deciders:** pending
-- **Evidence:** platform facts P1–P6, P21; S2 and S5 pending
+- **Evidence:** platform facts P1–P6, P21; S2 and S5 pending. First observation, 2026-10-21 ([M1 app on a OnePlus 11R](../spikes/results/2026-10-21-m1-app-first-run-oneplus-11r.md)): the service keeps listening with the screen locked, and swiping the app out of recent apps stops it and removes the notification, so this option cannot rely on the service surviving that on every phone
 
 ## Context
 

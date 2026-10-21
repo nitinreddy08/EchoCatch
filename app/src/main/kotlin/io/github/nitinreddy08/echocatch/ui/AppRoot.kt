@@ -98,6 +98,7 @@ private fun AppContent(graph: AppGraph, settings: AppSettings) {
             notificationPermissionApplies = inputs.notificationPermissionApplies,
             onSaveName = { graph.launch { graph.settings.saveName(it) } },
             onOpenAppSettings = { openAppSettings(activity) },
+            onOpenBatterySettings = { openBatterySettings(activity) },
             onBack = { destination = Destination.HOME },
         )
     } else {
