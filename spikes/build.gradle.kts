@@ -40,3 +40,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+
+dependencies {
+    // FileProvider, to hand the zip of test clips to the share sheet (ADR-0012).
+    implementation(libs.androidx.core)
+}

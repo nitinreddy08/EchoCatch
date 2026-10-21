@@ -67,7 +67,7 @@ Batch hardware work: collect everything a session needs so the user runs one ses
 - Never add the `INTERNET` permission or any networking library.
 - Never add a dependency or model without a `third-party.md` entry (name, version, licence, source URL, why).
 - Keep the audio thread allocation-free and lock-free in the steady state.
-- Never persist or log raw audio.
+- Never persist or log raw audio. The one exception is the Lab app's consented test clips (ADR-0012): never in `:app`, never committed to the repository; clips an owner sends stay outside the repository.
 - Keep `CLAUDE.md` short. When a command changes, update it in the same PR.
 - State clearly what was and was not verified. Never claim a hardware behaviour that was only inferred.
 - Do not widen a task. Note follow-ups as new task cards.

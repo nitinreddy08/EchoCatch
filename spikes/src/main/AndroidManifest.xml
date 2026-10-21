@@ -26,6 +26,23 @@
             </intent-filter>
         </activity>
 
+        <!-- Consented test clips for the name-detector benchmark (ADR-0012). Lab app only. -->
+        <activity
+            android:name=".ClipsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Hands the zip of test clips to the share sheet for one share at a time. Not exported. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="io.github.nitinreddy08.echocatch.lab.clips"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/clip_paths" />
+        </provider>
+
         <!-- Spikes S2, S5, S6: microphone foreground service. -->
         <service
             android:name=".LabService"

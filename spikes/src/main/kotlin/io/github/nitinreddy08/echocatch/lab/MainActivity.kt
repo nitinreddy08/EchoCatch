@@ -130,6 +130,10 @@ class MainActivity : Activity() {
         })
         column.addView(note("Other start paths to try: (a) stop the service, then tap Start in the notification that appears; (b) add the EchoCatch Lab tile to Quick Settings and tap it; (c) restart the phone and read the events (boot_start_failed is expected)."))
 
+        column.addView(heading("Step 5: record test clips (for the name detector)"))
+        column.addView(note("Record short clips of your name being said, other names, talking and background sound, so detection can be tested on real voices. The clips stay on this phone until you share them."))
+        column.addView(button("Open the clip recorder") { startActivity(Intent(this, ClipsActivity::class.java)) })
+
         column.addView(heading("Share your results"))
         column.addView(button("Share report (JSON, no audio)") { shareReport(eventsOnly = false) })
         column.addView(button("Share events only") { shareReport(eventsOnly = true) })

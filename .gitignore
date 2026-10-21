@@ -29,6 +29,9 @@ __pycache__/
 /tools/corpus/data/
 *.wav
 !/tools/bench/testdata/**/*.wav
+# Owner-recorded test clips (ADR-0012) are personal data: never committed
+echocatch-clips-*.zip
+/real-clips/
 
 # OS / editors
 .DS_Store

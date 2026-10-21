@@ -61,6 +61,9 @@ object SignalStats {
             .put("relativeBandPower", bands)
     }
 
+    /** Level of a sample magnitude (0 to 32768) in dB relative to full scale; -120 for silence. */
+    fun dbfsOf(value: Double): Double = dbfs(value)
+
     private fun dbfs(value: Double): Double = if (value <= 0.0) -120.0 else 20.0 * log10(value / 32768.0)
 
     private fun goertzelPower(samples: ShortArray, count: Int, sampleRate: Int, frequency: Int): Double {

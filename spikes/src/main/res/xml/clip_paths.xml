@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<!-- Only the zip built for the share sheet is reachable by other apps, never the clips folder itself (ADR-0012). -->
+<paths>
+    <files-path
+        name="shared_clips"
+        path="share/" />
+</paths>

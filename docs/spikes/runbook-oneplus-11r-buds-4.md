@@ -86,9 +86,22 @@ Goal: measure what listening costs. Only do this if you have the time. Use the s
 
 After each run tap **Show last events** (the app writes a `battery` line every minute) and tap **Share report**. Do not try to read the numbers yourself.
 
+## Part 5. Record test clips for the name detector (about 20 minutes)
+
+This is the one part that keeps audio, so read this first: the clips are short recordings of voices. They stay inside the Lab app on your phone until you tap **Share**, and **Delete all clips** removes them. Only record people who agree. The EchoCatch app itself never stores audio (ADR-0012).
+
+1. Open **EchoCatch Lab**, scroll to **Step 5**, tap **Open the clip recorder**. If it asks for the microphone, allow it.
+2. Under **Who and where** type the name to detect (your name as people say it), who is speaking ("me"), and one **other name** that sounds a little like yours. Pick the place and the distance.
+3. Tap a **Record** button. After a 3 second countdown it records 8 seconds. For name clips, wait for **SAY IT NOW**, say the name once the way a friend would call you, then stay quiet. Keep the screen in view.
+4. Read the line under the level bar. If it says the clip was silent, too loud or too quiet, tap **Delete this clip and record it again**.
+5. Aim for about 30 clips: 6 or more name clips in a quiet room at different distances (0.5 m, 1 m, 2 m, 4 m or from another room), 6 with a TV or music on, a few outdoors; 6 other-name clips; 6 talking clips (talk normally without saying your name); 4 background clips (say nothing). Name clips from a second person (change **Who is speaking**) are the most valuable.
+6. Tap **Share clips (zip)** and send the zip to me by attaching it in our chat. If the chat refuses a file that size, share about 15 clips at a time: share, then **Delete all clips**, then record more.
+
+The zip contains the clips, a `clips.jsonl` file that says what each clip is (kind, place, distance, speaker tag, name), and `session.json` with your phone model. I keep clips outside the repository, which is public, and I will not publish them.
+
 ## Sending results back
 
-After each part, tap **Share report (JSON, no audio)** at the bottom and send it to yourself (email or a notes app) or paste it into our chat. The report includes your phone model, Android version, the audio devices the phone sees, and the results of each test. It does not include audio, Bluetooth addresses, or your name.
+After each part, tap **Share report (JSON, no audio)** at the bottom and send it to yourself (email or a notes app) or paste it into our chat. The report includes your phone model, Android version, the audio devices the phone sees, and the results of each test. It does not include audio, Bluetooth addresses, or your name. (Test clips in Part 5 are separate and do contain voices.)
 
 Also write a few lines for me: what you heard in each test (for example "Spotify ducked, YouTube Music paused", "Buds 4 sounded like a phone call"), and anything surprising.
 

@@ -73,6 +73,6 @@ Three things need more than one file to understand:
 - Primary test devices: OnePlus 11R and OnePlus Buds 4. They are one data point, not proof of broad compatibility.
 - Feature-detect; never branch on phone or earbud model names. Put API-level differences behind adapters, not scattered `SDK_INT` checks. No Google Play Services dependency. The phone-mic baseline must keep working on every supported API level (ADR-0009).
 - Decide by measurement (ADR-0001). Numbers marked ⚠ in `docs/plan/01-requirements.md` are placeholders until the M0 spikes finish. Do not present them as measured.
-- Keep the audio thread allocation-free and lock-free in the steady state. Never persist or log raw audio.
+- Keep the audio thread allocation-free and lock-free in the steady state. Never persist or log raw audio. The one exception is the Lab app's consented test clips (ADR-0012): never in `:app`, never committed to the repository.
 - The cloud sandbox has no phone or Bluetooth. Say clearly what was verified and what was only inferred. Hardware results come from the user via the protocol in `docs/plan/08-ai-agent-workflow.md`.
 - Do not create a pull request unless the user asks.
