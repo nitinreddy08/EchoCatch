@@ -27,8 +27,9 @@ class Report {
         return if (array.length() > 0) array.optJSONObject(array.length() - 1) else null
     }
 
+    /** Compact JSON, so a whole report fits in one chat message. */
     @Synchronized
-    fun json(): String = root.toString(2)
+    fun json(): String = root.toString()
 
     fun save(context: Context) {
         File(context.filesDir, "lab-report.json").writeText(json())

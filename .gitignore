@@ -38,3 +38,6 @@ Thumbs.db
 
 # Kotlin compiler session files
 .kotlin/
+
+# The lab app uses one fixed, public, throwaway debug key so CI builds update in place (see spikes/build.gradle.kts)
+!/spikes/debug.keystore

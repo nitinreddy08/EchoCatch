@@ -51,6 +51,19 @@ object DeviceInfo {
         .put("channelCounts", JSONArray(device.channelCounts.toList()))
         .put("encodings", JSONArray(device.encodings.toList()))
 
+    /** Input types that are real microphones. The others (FM tuner, remote submix, telephony) only give silence or errors. */
+    @SuppressLint("InlinedApi")
+    fun isRealMicrophone(type: Int): Boolean = when (type) {
+        AudioDeviceInfo.TYPE_BUILTIN_MIC,
+        AudioDeviceInfo.TYPE_BLUETOOTH_SCO,
+        AudioDeviceInfo.TYPE_BLE_HEADSET,
+        AudioDeviceInfo.TYPE_WIRED_HEADSET,
+        AudioDeviceInfo.TYPE_USB_DEVICE,
+        AudioDeviceInfo.TYPE_USB_HEADSET,
+        -> true
+        else -> false
+    }
+
     @SuppressLint("InlinedApi")
     fun typeName(type: Int): String = when (type) {
         AudioDeviceInfo.TYPE_BUILTIN_MIC -> "BUILTIN_MIC"
@@ -65,6 +78,8 @@ object DeviceInfo {
         AudioDeviceInfo.TYPE_TELEPHONY -> "TELEPHONY"
         AudioDeviceInfo.TYPE_BLE_HEADSET -> "BLE_HEADSET"
         AudioDeviceInfo.TYPE_BLE_SPEAKER -> "BLE_SPEAKER"
+        16 -> "FM_TUNER" // AudioDeviceInfo.TYPE_FM_TUNER
+        25 -> "REMOTE_SUBMIX" // AudioDeviceInfo.TYPE_REMOTE_SUBMIX
         else -> "TYPE_$type"
     }
 }

@@ -38,8 +38,23 @@ object SignalStats {
                 bands.put("${frequency}Hz", powers[index] / total)
             }
         }
+        // Loudness per 100 ms window: shows whether speech was present (steady near-silence means nobody spoke).
+        val windowSize = sampleRate / 10
+        val windowLevels = ArrayList<Double>()
+        var start = 0
+        while (start + windowSize <= count) {
+            var windowSquares = 0.0
+            for (i in start until start + windowSize) windowSquares += samples[i].toDouble() * samples[i]
+            windowLevels.add(dbfs(sqrt(windowSquares / windowSize)))
+            start += windowSize
+        }
+        windowLevels.sort()
+        val p95 = if (windowLevels.isEmpty()) -120.0 else windowLevels[((windowLevels.size - 1) * 0.95).toInt()]
+        val loudWindows = windowLevels.count { it > -45.0 }.toDouble() / maxOf(1, windowLevels.size)
         return JSONObject()
             .put("samples", count)
+            .put("windowRmsP95Dbfs", p95)
+            .put("fractionOfWindowsAboveMinus45Dbfs", loudWindows)
             .put("rmsDbfs", dbfs(rms))
             .put("peakDbfs", dbfs(peak.toDouble()))
             .put("zeroSampleFraction", zeros.toDouble() / count)

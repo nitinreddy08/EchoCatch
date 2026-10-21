@@ -18,6 +18,17 @@ android {
         versionName = "0.0.1-lab1"
     }
 
+    // A fixed, public, throwaway debug key (password "android"). Every CI build is then signed the same way, so a newer
+    // build installs over the older one and keeps its saved event log. It must never be used for a release.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

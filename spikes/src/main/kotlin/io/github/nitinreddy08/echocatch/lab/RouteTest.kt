@@ -153,6 +153,10 @@ class RouteTest(private val context: Context) {
                 info.put("communicationDeviceFound", target != null)
                 if (target != null) {
                     info.put("setCommunicationDeviceAccepted", audioManager.setCommunicationDevice(target))
+                    val waitStart = SystemClock.elapsedRealtime()
+                    val active = waitFor(4000) { audioManager.communicationDevice?.type == target.type }
+                    info.put("communicationDeviceActive", active)
+                    info.put("communicationDeviceActiveAfterMs", SystemClock.elapsedRealtime() - waitStart)
                 } else {
                     audioManager.clearCommunicationDevice()
                 }
