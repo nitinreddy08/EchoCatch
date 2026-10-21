@@ -83,7 +83,7 @@
     <string name="permission_not_allowed">Not allowed</string>
     <string name="settings_open_app_settings">Open app settings</string>
     <string name="settings_keep_title">Keep listening running</string>
-    <string name="settings_keep_body">Some phones stop an app when it is swiped away from recent apps, and its notification disappears with it. If yours does: first, lock EchoCatch in recent apps (long-press or pull down its card, then choose Lock; the wording differs between phones). Second, in the app's battery settings, allow background activity. EchoCatch does not ask Android to ignore battery optimisation.</string>
+    <string name="settings_keep_body">Some phones stop an app when it is swiped away from recent apps, and its notification disappears with it. If yours does: first, lock EchoCatch in recent apps (long-press or pull down its card, then choose Lock; the wording differs between phones). Second, in the app\'s battery settings, allow background activity. EchoCatch does not ask Android to ignore battery optimisation.</string>
     <string name="settings_open_battery_settings">Open battery settings</string>
     <string name="settings_privacy_title">Privacy</string>
     <string name="settings_privacy_body">Sound from the microphone is analysed on this phone and discarded. Nothing is recorded, saved or sent anywhere. The app has no internet permission.</string>
