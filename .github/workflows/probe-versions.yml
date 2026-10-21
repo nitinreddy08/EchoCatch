@@ -41,10 +41,13 @@ jobs:
                   except Exception:
                       continue
                   z = zipfile.ZipFile(io.BytesIO(data))
-                  props = z.read("META-INF/com/android/build/gradle/aar-metadata.properties").decode()
+                  try:
+                      props = z.read("META-INF/com/android/build/gradle/aar-metadata.properties").decode()
+                  except KeyError:
+                      continue
                   keep = ("minCompileSdk=", "minAndroidGradlePluginVersion=")
                   return f"{name}: " + " ".join(l for l in props.splitlines() if l.startswith(keep))
-              return "no aar found"
+              return "no aar metadata found"
 
           print("== artifacts")
           for group, artifact in [
